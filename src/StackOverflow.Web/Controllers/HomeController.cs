@@ -11,33 +11,23 @@ namespace StackOverflow.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IPostRepository postRepository;
-        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork, IPostRepository postRepository)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
-            this.postRepository = postRepository;
         }
 
         public IActionResult Index()
         {
             var post = new Post
             {
-                Title = "Homecoming 2",
+                Title = "Home",
+                Description = "Demo Description",
                 CreatedByUserId = Guid.NewGuid()
             };
 
-            try
-            {
-                _unitOfWork.PostRepository.Add(post);
-                _unitOfWork.Commit();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-            }
-
-            
+            _unitOfWork.PostRepository.Add(post);
+            _unitOfWork.Commit();
 
             return View();
         }

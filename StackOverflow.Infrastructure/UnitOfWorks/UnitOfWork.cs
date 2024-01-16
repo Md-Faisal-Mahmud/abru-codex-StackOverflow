@@ -1,7 +1,5 @@
 ﻿using NHibernate;
-using StackOverflow.Application;
 using StackOverflow.Infrastructure.Repositories;
-using System.Data;
 
 namespace StackOverflow.Infrastructure.UnitOfWorks
 {

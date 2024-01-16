@@ -1,6 +1,7 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using StackOverflow.Application;
 using StackOverflow.Infrastructure.Extensions;
 
 namespace StackOverflow.Web
@@ -20,6 +21,7 @@ namespace StackOverflow.Web
             builder.Host.ConfigureContainer<ContainerBuilder>(x =>
             {
                 x.RegisterModule(new WebModule());
+                x.RegisterModule(new ApplicationModule());
             });
 
             builder.Services.AddIdentity(connectionString);

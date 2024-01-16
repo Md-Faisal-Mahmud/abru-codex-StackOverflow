@@ -16,12 +16,11 @@ namespace StackOverflow.Infrastructure.Mapping
                 map.Generator(Generators.Identity);
             });
             Property(x => x.Title);
+            Property(x => x.Description);
             Property(x => x.CreatedDate);
             Property(x => x.CreatedByUserId);
 
-            // Other mappings...
-
-            Table("Post"); // Specify your table name here
+            Table("Post");
         }
 
 
