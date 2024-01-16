@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Identity;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using StackOverflow.Web.Data;
+using StackOverflow.Infrastructure.Extensions;
 
 namespace StackOverflow.Web
 {
@@ -12,12 +13,16 @@ namespace StackOverflow.Web
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+            builder.Host.ConfigureContainer<ContainerBuilder>(x =>
+            {
+                x.RegisterModule(new WebModule());
+            });
+
+            builder.Services.AddIdentity(connectionString);
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
