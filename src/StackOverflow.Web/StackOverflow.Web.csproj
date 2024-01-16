@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\StackOverflow.Application\StackOverflow.Application.csproj" />
     <ProjectReference Include="..\..\StackOverflow.Infrastructure\StackOverflow.Infrastructure.csproj" />
   </ItemGroup>

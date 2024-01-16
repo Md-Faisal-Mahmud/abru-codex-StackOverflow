@@ -1,0 +1,81 @@
+﻿@model LoginModel
+@section Styles
+    {
+    <link rel="stylesheet" href="~/css/captcha.css">
+}
+
+<style src=""></style>
+<div class="hold-transition login-page">
+    <div class="login-box">
+        <div class="card card-outline card-primary">
+            <!-- /.login-logo -->
+            <div class="card-header text-center">
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="h1"><b>Stack</b>Overflow</a>
+            </div>
+            <!-- /.login-logo -->
+        </div>
+
+        <div class="card">
+            <!-- /.login-card-body -->
+            <div class="card-body login-card-body">
+
+                <form id="form" class="form" asp-antiforgery="true" asp-controller="Account" asp-action="Login" asp-route-returnurl="@Model.ReturnUrl" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                    <div class="input-group mb-3">
+                        <input type="email" asp-for="Email" class="form-control" autocomplete="username" aria-required="true" placeholder="Email">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                    <div class="input-group mb-3">
+                        <input type="password" asp-for="Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="g-recaptcha" data-sitekey="6LfpJoUoAAAAALNRRldTc4u8IBugFfUxVVRpHY8s"></div>
+                    <br />
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="icheck-primary">
+                                <input asp-for="RememberMe" type="checkbox" id="remember">
+                                @Html.DisplayNameFor(m => m.RememberMe)
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                        </div>
+                    </div>
+                </form>
+                <div style="text-align: center;">
+                    <p id="captcha_msg"></p>
+                </div>
+
+                <p class="mb-1">
+                    <a href="#">Forgot your password ?</a>
+                </p>
+                <p class="mb-0">
+                    Don't have account ?
+                    <a asp-area="" asp-controller="Auth" asp-action="Register" class="text-center">Register</a>
+                </p>
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+    <!-- /.login-box -->
+</div>
+@section Scripts
+    {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="~/js/captcha.js"></script>
+}

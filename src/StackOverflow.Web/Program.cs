@@ -1,3 +1,5 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using StackOverflow.Infrastructure.Extensions;
 
@@ -13,6 +15,12 @@ namespace StackOverflow.Web
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+            builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+            builder.Host.ConfigureContainer<ContainerBuilder>(x =>
+            {
+                x.RegisterModule(new WebModule());
+            });
 
             builder.Services.AddIdentity(connectionString);
             builder.Services.AddControllersWithViews();
