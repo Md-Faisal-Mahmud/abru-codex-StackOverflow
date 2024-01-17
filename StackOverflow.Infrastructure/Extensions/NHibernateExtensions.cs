@@ -33,10 +33,6 @@ namespace StackOverflow.Infrastructure.Extensions
             services.AddSingleton(sessionFactory);
             services.AddScoped(factory => sessionFactory.OpenSession());
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IPostRepository, PostRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
-
             return services;
         }
     }

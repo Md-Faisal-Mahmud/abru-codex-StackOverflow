@@ -14,6 +14,8 @@ namespace StackOverflow.Infrastructure.UnitOfWorks
         void Rollback();
 
         IPostRepository Post { get; }
-        IUserRepository User {get; }
+        IUserRepository User { get; }
+        ITagRepository Tag { get; }
+
     }
 }

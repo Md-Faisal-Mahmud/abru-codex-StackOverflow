@@ -14,8 +14,10 @@ namespace StackOverflow.Infrastructure.UnitOfWorks
         public IPostRepository Post { get; private set; }
         public IUserRepository User { get; private set; }
 
-        public UnitOfWork(ISessionFactory sessionFactory,IPostRepository postRepository,
-                          IUserRepository userRepository)
+        public ITagRepository Tag { get; private set; }
+
+        public UnitOfWork(ISessionFactory sessionFactory, IPostRepository postRepository,
+                          IUserRepository userRepository, ITagRepository tagRepository)
         {
             _sessionFactory = sessionFactory;
 
@@ -27,6 +29,7 @@ namespace StackOverflow.Infrastructure.UnitOfWorks
 
             Post = postRepository;
             User = userRepository;
+            Tag = tagRepository;
         }
 
         public void Dispose()

@@ -2,6 +2,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using StackOverflow.Application;
+using StackOverflow.Infrastructure;
 using StackOverflow.Infrastructure.Extensions;
 
 namespace StackOverflow.Web
@@ -22,6 +23,7 @@ namespace StackOverflow.Web
             {
                 x.RegisterModule(new WebModule());
                 x.RegisterModule(new ApplicationModule());
+                x.RegisterModule(new InfrastructureModule());
             });
 
             builder.Services.AddIdentity(connectionString);
