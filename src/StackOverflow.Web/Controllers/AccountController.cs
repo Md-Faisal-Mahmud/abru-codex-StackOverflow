@@ -91,9 +91,7 @@ namespace StackOverflow.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var at = model.Email.LastIndexOf('@');
-                var userName = model.Email.Substring(0, at);
-                var result = await _signInManager.PasswordSignInAsync(userName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.IsNotAllowed)
                 {
                     return RedirectToAction("RegisterConfirmation", "Account", new { email = model.Email });

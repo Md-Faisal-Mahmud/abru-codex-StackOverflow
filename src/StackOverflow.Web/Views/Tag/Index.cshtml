@@ -1,0 +1,102 @@
+﻿@inject UserManager<ApplicationUser> UserManager;
+
+<div class="content-header">
+    <div class="container">
+        <div class="row justify-content-between mb-2">
+            <div>
+                <h3>Tags</h3>
+            </div><!-- /.col -->
+            <div>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-controller="Tag" asp-action="Create" class="btn btn-primary">Add New</a>
+                }
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+        <div class="row">
+            <p>A tag is a keyword or label that categorizes your question with other, similar questions. Using the right tags makes it easier for others to find and answer your question.</p>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Java</h5>
+                        <p class="card-text">Questions: 5,283,420</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Python</h5>
+                        <p class="card-text">Questions: 3,047,959</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Python</h5>
+                        <p class="card-text">Questions: 3,047,959</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Python</h5>
+                        <p class="card-text">Questions: 3,047,959</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Python</h5>
+                        <p class="card-text">Questions: 3,047,959</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Python</h5>
+                        <p class="card-text">Questions: 3,047,959</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Python</h5>
+                        <p class="card-text">Questions: 3,047,959</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Python</h5>
+                        <p class="card-text">Questions: 3,047,959</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">JavaScript</h5>
+                        <p class="card-text">Questions: 3,622,074</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">C#</h5>
+                        <p class="card-text">Questions: 1,077,083</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

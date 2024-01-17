@@ -25,7 +25,7 @@ namespace StackOverflow.Infrastructure
                 Id = adminId,
                 DisplayName ="Super Admin",
                 UserName = "admin@gmail.com",
-                NormalizedUserName = "ADMIN",
+                NormalizedUserName = "ADMIN@GMAIL.COM",
                 Email = "admin@gmail.com",
                 NormalizedEmail="ADMIN@GMAIL.COM",
                 EmailConfirmed = true,
