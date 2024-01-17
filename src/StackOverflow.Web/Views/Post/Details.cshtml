@@ -1,0 +1,27 @@
+﻿@model Post
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1>@Model.Title</h1>
+            <p>Asked by <strong>Test</strong> on @Model.CreatedDate.ToShortDateString()</p>
+            <p>@Model.Description</p>
+
+            @* @foreach (var answer in Model.Answers)
+            { *@
+                <div class="card my-3">
+                    <div class="card-header">
+                        Answered by <strong>Demo</strong> on @Model.CreatedDate.ToShortDateString()
+                    </div>
+                    <div class="card-body">
+                        @Model.Description
+                    </div>
+                    <div class="card-footer text-muted">
+                        <button class="btn btn-primary mr-2">Upvote</button>
+                        <button class="btn btn-danger mr-2">Downvote</button>
+                    </div>
+                </div>
+            @* } *@
+        </div>
+    </div>
+</div>

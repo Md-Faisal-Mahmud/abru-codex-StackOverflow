@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using StackOverflow.Web.Models;
+using StackOverflow.Web.Models.PostModel;
 
 namespace StackOverflow.Web
 {
@@ -13,6 +14,9 @@ namespace StackOverflow.Web
 
             builder.RegisterType<LoginModel>().AsSelf()
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<AddPostModel>().AsSelf();
+            builder.RegisterType<PostListModel>().AsSelf();
 
             base.Load(builder);
         }

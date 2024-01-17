@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Mvc;
+using StackOverflow.Infrastructure.Entity;
+using StackOverflow.Infrastructure.UnitOfWorks;
 using StackOverflow.Web.Models;
 using System.Diagnostics;
 
@@ -7,13 +10,12 @@ namespace StackOverflow.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public  IActionResult Index()
         {
             return View();
         }

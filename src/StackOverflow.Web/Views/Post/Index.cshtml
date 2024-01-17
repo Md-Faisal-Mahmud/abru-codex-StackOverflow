@@ -1,0 +1,81 @@
+﻿@inject SignInManager<ApplicationUser> SignInManager;
+
+@model PostListModel
+
+<div class="content-header">
+    <div class="container">
+        <div class="row justify-content-between mb-2">
+            <div class="">
+                <h3> All Questions</h3>
+            </div><!-- /.col -->
+            <div class="">
+                <a asp-controller="Post" asp-action="Create" class="btn btn-primary">Ask Question</a>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+
+        <div class="row">
+                <div class="col">
+                    @foreach (var item in Model.Posts)
+                    {
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-10">
+                                        <h5 class="card-title">@item.Title</h5>
+                                    </div>
+                                    <div class="col-2">
+                                        <h5 class="card-title">@item.CreatedDate</h5>
+                                    </div>
+                                    <div class="col">
+                                        <p class="card-text">@item.Description</p>
+                                    </div>
+                                </div>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm mt-5">View Answers</a>
+                           </div>
+                        
+                        </div>
+                    }
+
+                    <!-- Repeat the above code for each question -->
+                </div>
+                @* <div class="card">
+                <div class="card-body">
+                <h5 class="card-title">Answered by User Name</h5>
+                <p class="card-text">Answer content goes here...</p>
+                <button class="btn btn-outline-primary">Upvote</button>
+                <button class="btn btn-outline-secondary">Downvote</button>
+                </div>
+                </div> *@
+
+            @* <aside class="col-md-4">
+            <h4>Popular Tags</h4>
+            <ul class="list-group">
+            <li class="list-group-item">Tag 1</li>
+            <li class="list-group-item">Tag 2</li>
+            <!-- Add more tags as needed -->
+            </ul>
+            <!-- Sidebar with popular tags, users, etc. -->
+            </aside> *@
+            
+        </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+
+    </div><!-- /.container-fluid -->
+</div>
+<div class="content">
+    <div class="container">
+        
+    </div>
+</div>

@@ -23,9 +23,9 @@ namespace StackOverflow.Infrastructure.Extensions
             services.ConfigureApplicationCookie(options =>
             {
                 // Custom cookie configuration
-                options.LoginPath = new PathString("/Auth/Login");
-                options.AccessDeniedPath = new PathString("/Auth/AccessDenied");
-                options.LogoutPath = new PathString("/Auth/Logout");
+                options.LoginPath = new PathString("/Account/Login");
+                options.AccessDeniedPath = new PathString("/Account/AccessDenied");
+                options.LogoutPath = new PathString("/Account/Logout");
                 options.Cookie.Name = "StackOverflow.Identity";
                 options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
