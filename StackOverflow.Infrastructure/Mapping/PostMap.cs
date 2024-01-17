@@ -23,6 +23,14 @@ namespace StackOverflow.Infrastructure.Mapping
                 map.Cascade(Cascade.None);
             });
 
+            Bag(x => x.Tags, map =>
+            {
+                map.Table("TagPosts"); // Specify the join table
+                map.Key(k => k.Column("PostId"));
+                map.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                map.Inverse(true);
+            }, relation => relation.ManyToMany(m => m.Column("TagId")));
+
             Bag(x => x.Answers, map =>
             {
                 map.Key(k => k.Column("PostId"));

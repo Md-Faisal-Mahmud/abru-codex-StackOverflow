@@ -28,6 +28,7 @@ namespace StackOverflow.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -153,6 +154,26 @@ namespace StackOverflow.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { new Guid("a4607923-9239-4c6d-95cf-0d2ccf55c0d6"), "f0ac04c6-6f2d-4d30-928e-2d5b9b1c422e", "Admin", "ADMIN" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { new Guid("aa4e5374-e8b5-42a4-87b9-702f5f79a718"), "19fe3234-c815-46a1-93c5-555a7b6fcd92", "User", "USER" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DisplayName", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { new Guid("2c1f8aef-591c-4545-8bb0-d48d3a54afc3"), 0, "caa1dcd9-de16-459a-9fbc-4f55d8556fba", "Super Admin", "admin@gmail.com", true, false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAEAACcQAAAAEC5WQuDsdn2qwnZNqwqyDcznDSWpmPCtaTkoFkPN/TK34BjoyWhBCOzPoke7+sTdRw==", null, false, "BFCC7B453A8B4B6C8A4C93EE28A3B4A8", false, "admin@gmail.com" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { new Guid("a4607923-9239-4c6d-95cf-0d2ccf55c0d6"), new Guid("2c1f8aef-591c-4545-8bb0-d48d3a54afc3") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

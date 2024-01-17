@@ -18,10 +18,5 @@ namespace StackOverflow.Infrastructure.Repositories
         {
             _session = session;
         }
-
-        public IList<Post> GetPostWithUser()
-        {
-throw new NotImplementedException();
-        }
     }
 }

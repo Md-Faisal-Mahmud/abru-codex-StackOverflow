@@ -9,6 +9,5 @@ namespace StackOverflow.Infrastructure.Repositories
 {
     public interface IPostRepository : IRepository<Post>
     {
-        IList<Post> GetPostWithUser();
     }
 }

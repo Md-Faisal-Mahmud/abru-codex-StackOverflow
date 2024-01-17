@@ -25,7 +25,7 @@ namespace StackOverflow.Application.Services
 
         public IList<Post> GetAllPost()
         {
-            return _unitOfWork.Post.GetPostWithUser();
+            return _unitOfWork.Post.All().ToList();
         }
 
         public Post GetById(int id)
