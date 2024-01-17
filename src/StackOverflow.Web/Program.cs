@@ -25,7 +25,9 @@ namespace StackOverflow.Web
             });
 
             builder.Services.AddIdentity(connectionString);
+
             builder.Services.AddNHibernate(connectionString);
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();

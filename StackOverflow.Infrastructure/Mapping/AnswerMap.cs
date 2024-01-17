@@ -1,20 +1,23 @@
-﻿using NHibernate;
-using NHibernate.Mapping.ByCode;
+﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using StackOverflow.Infrastructure.Entity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace StackOverflow.Infrastructure.Mapping
 {
-    public class PostMap : ClassMapping<Post>
+    public class AnswerMap : ClassMapping<Answer>
     {
-        public PostMap()
+        public AnswerMap()
         {
-            Table("Posts");
+            Table("Answers");
 
             Id(x => x.Id, map => map.Generator(Generators.Identity));
 
-            Property(x => x.Title);
-            Property(x => x.Description);
+            Property(x => x.AnswerText);
             Property(x => x.CreatedDate);
 
             ManyToOne(x => x.User, map =>
@@ -23,12 +26,11 @@ namespace StackOverflow.Infrastructure.Mapping
                 map.Cascade(Cascade.None);
             });
 
-            Bag(x => x.Answers, map =>
+            ManyToOne(x => x.Post, map =>
             {
-                map.Key(k => k.Column("PostId"));
-                map.Cascade(Cascade.All | Cascade.DeleteOrphans);
-            }, relation => relation.OneToMany());
+                map.Column("PostId");
+                map.Cascade(Cascade.None);
+            });
         }
-
     }
 }

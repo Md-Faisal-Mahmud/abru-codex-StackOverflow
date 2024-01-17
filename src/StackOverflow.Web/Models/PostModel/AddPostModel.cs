@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using NHibernate.Mapping.ByCode.Impl;
 using StackOverflow.Application.Services;
 using StackOverflow.Infrastructure.Entity;
 
@@ -15,7 +14,7 @@ namespace StackOverflow.Web.Models.PostModel
 
         public AddPostModel()
         {
-            
+
         }
 
         public AddPostModel(IPostService postService)
@@ -34,7 +33,6 @@ namespace StackOverflow.Web.Models.PostModel
             {
                 Title = Title,
                 Description = Description,
-                CreatedByUserId = CreatedByUserId
             };
 
             _postService.AddPost(post);

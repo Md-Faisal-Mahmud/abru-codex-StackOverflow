@@ -19,8 +19,18 @@ namespace StackOverflow.Application.Services
 
         public void AddPost(Post entity)
         {
-            _unitOfWork.PostRepository.Add(entity);
+            _unitOfWork.Post.Add(entity);
             _unitOfWork.Commit();
+        }
+
+        public IList<Post> GetAllPost()
+        {
+            return _unitOfWork.Post.GetPostWithUser();
+        }
+
+        public Post GetById(int id)
+        {
+            return _unitOfWork.Post.FindBy(id);
         }
     }
 }

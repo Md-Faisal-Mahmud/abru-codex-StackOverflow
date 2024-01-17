@@ -11,9 +11,11 @@ namespace StackOverflow.Infrastructure.UnitOfWorks
 
         public ISession Session { get; private set; }
 
-        public IPostRepository PostRepository { get; set; }
+        public IPostRepository Post { get; private set; }
+        public IUserRepository User { get; private set; }
 
-        public UnitOfWork(ISessionFactory sessionFactory, IPostRepository postRepository)
+        public UnitOfWork(ISessionFactory sessionFactory,IPostRepository postRepository,
+                          IUserRepository userRepository)
         {
             _sessionFactory = sessionFactory;
 
@@ -22,7 +24,9 @@ namespace StackOverflow.Infrastructure.UnitOfWorks
             Session.FlushMode = FlushMode.Auto;
 
             _transaction = Session.BeginTransaction();
-            PostRepository = postRepository;
+
+            Post = postRepository;
+            User = userRepository;
         }
 
         public void Dispose()

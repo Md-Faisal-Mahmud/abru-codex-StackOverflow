@@ -13,6 +13,7 @@ namespace StackOverflow.Infrastructure.UnitOfWorks
 
         void Rollback();
 
-        IPostRepository PostRepository { get; }
+        IPostRepository Post { get; }
+        IUserRepository User {get; }
     }
 }

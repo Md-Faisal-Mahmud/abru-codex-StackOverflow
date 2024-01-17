@@ -8,6 +8,7 @@ namespace StackOverflow.Infrastructure.Entity
         public virtual string Title { get; set; }
         public virtual string Description { get; set; }
         public virtual DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-        public virtual Guid CreatedByUserId { get; set; }
+        public virtual IList<Answer> Answers { get; set; } = new List<Answer>();
+        public virtual User User { get; set; }
     }
 }

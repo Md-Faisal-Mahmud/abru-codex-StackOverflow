@@ -22,7 +22,7 @@ namespace StackOverflow.Infrastructure.Extensions
                 c.Dialect<MsSql2012Dialect>();
                 c.ConnectionString = connectionString;
                 c.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
-                c.SchemaAction = SchemaAutoAction.Create;
+                c.SchemaAction = SchemaAutoAction.Update;
                 c.LogFormattedSql = true;
                 c.LogSqlInConsole = true;
             });
@@ -35,6 +35,7 @@ namespace StackOverflow.Infrastructure.Extensions
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IPostRepository, PostRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             return services;
         }

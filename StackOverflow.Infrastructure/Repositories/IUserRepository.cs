@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace StackOverflow.Infrastructure.Repositories
 {
-    public interface IPostRepository : IRepository<Post>
+    public interface IUserRepository : IRepository<User>
     {
-        IList<Post> GetPostWithUser();
     }
 }

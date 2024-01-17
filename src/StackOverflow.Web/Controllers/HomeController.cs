@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Mvc;
 using StackOverflow.Infrastructure.Entity;
-using StackOverflow.Infrastructure.Repositories;
 using StackOverflow.Infrastructure.UnitOfWorks;
 using StackOverflow.Web.Models;
 using System.Diagnostics;
@@ -10,25 +10,13 @@ namespace StackOverflow.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IUnitOfWork _unitOfWork;
-        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _unitOfWork = unitOfWork;
         }
 
-        public IActionResult Index()
+        public  IActionResult Index()
         {
-            var post = new Post
-            {
-                Title = "Home",
-                Description = "Demo Description",
-                CreatedByUserId = Guid.NewGuid()
-            };
-
-            _unitOfWork.PostRepository.Add(post);
-            _unitOfWork.Commit();
-
             return View();
         }
 

@@ -10,5 +10,7 @@ namespace StackOverflow.Application.Services
     public interface IPostService
     {
         void AddPost(Post entity);
+        Post GetById(int id);
+        IList<Post> GetAllPost();
     }
 }
