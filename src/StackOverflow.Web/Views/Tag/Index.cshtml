@@ -1,4 +1,6 @@
-﻿@inject UserManager<ApplicationUser> UserManager;
+﻿@using StackOverflow.Web.Models.TagModel;
+@inject UserManager<ApplicationUser> UserManager;
+@model GetTagModel;
 
 <div class="content-header">
     <div class="container">
@@ -9,94 +11,148 @@
             <div>
                 @if (User.IsInRole("Admin"))
                 {
-                    <a asp-controller="Tag" asp-action="Create" class="btn btn-primary">Add New</a>
+                    @* <a asp-controller="Tag" asp-action="Create" class="btn btn-primary">Add New</a> *@
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tagCreateModal">Add New</button>
                 }
             </div><!-- /.col -->
         </div><!-- /.row -->
         <div class="row">
             <p>A tag is a keyword or label that categorizes your question with other, similar questions. Using the right tags makes it easier for others to find and answer your question.</p>
         </div>
+        
         <div class="row">
-            <div class="col-md-3">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Java</h5>
-                        <p class="card-text">Questions: 5,283,420</p>
+            @if (Model.Tags.Count > 0)
+            {
+                @foreach(var item in Model.Tags)
+                {
+                    <div class="col-md-3">
+                        <div class="card mb-3 w-100 h-90">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.TagName</h5>
+                                <p class="card-text">@item.TagDescription</p>
+                                <p class="card-text"><small class="badge bg-secondary">@item.Posts.Count()</small> questions</p>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <div class="float-right">
+                                        <button value="@item.Id" type="button" class="btn btn-secondary">Edit</button>
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete(@item.Id)">Delete</button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Python</h5>
-                        <p class="card-text">Questions: 3,047,959</p>
+                }
+            }else{
+                <h3>No Data Found</h3>
+            }
+            
+        </div>
+
+
+        <div class="modal fade" id="tagCreateModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Tag</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Python</h5>
-                        <p class="card-text">Questions: 3,047,959</p>
+                    <div class="modal-body">
+                        <form id="tagCreateForm" action="@Url.Action("Create", "Tag")">
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-group">
+                                <label for="tag-name" class="col-form-label">Tag Name:</label>
+                                <input type="text" class="form-control" id="tag-name" name="TagName" required minlength="2" maxlength="10">
+                                <div class="invalid-feedback text-danger">Tag Name must be between 2 and 10 characters.</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tag-description" class="col-form-label">Description:</label>
+                                <textarea class="form-control" id="tag-description" name="TagDescription" required minlength="2" maxlength="150"></textarea>
+                                <div class="invalid-feedback text-danger">Description must be between 2 and 150 characters.</div>
+                            </div>
+                        </form>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Python</h5>
-                        <p class="card-text">Questions: 3,047,959</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Python</h5>
-                        <p class="card-text">Questions: 3,047,959</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Python</h5>
-                        <p class="card-text">Questions: 3,047,959</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Python</h5>
-                        <p class="card-text">Questions: 3,047,959</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Python</h5>
-                        <p class="card-text">Questions: 3,047,959</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">JavaScript</h5>
-                        <p class="card-text">Questions: 3,622,074</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">C#</h5>
-                        <p class="card-text">Questions: 1,077,083</p>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveTagButton">Save</button>
                     </div>
                 </div>
             </div>
         </div>
+
+
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script>
+
+        function confirmDelete(tagId) {
+            if (confirm("Are you sure you want to delete this tag?")) {
+                deleteTag(tagId);
+            }
+        }
+
+        function deleteTag(tagId) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Delete", "Tag")",
+                data: { id: tagId },
+                headers: {
+                    RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                success: function () {
+                    // Handle success, e.g., reload content or show a success message
+                    location.reload(true);
+                },
+                error: function (error) {
+                    // Handle errors, e.g., display an error message
+                    console.log(error);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+
+
+            
+
+            $("#tagCreateForm").validate({
+                errorClass: "text-danger",
+            });
+
+            $("#saveTagButton").click(function () {
+                if ($("#tagCreateForm").valid()) {
+                    
+                    var tagName = $("#tag-name").val();
+                    var tagDescription = $("#tag-description").val();
+
+                    var data = {
+                        TagName: tagName,
+                        TagDescription: tagDescription
+                    };
+
+                    $.ajax({
+                        type: "POST",
+                        url: $("#tagCreateForm").attr("action"),
+                        data: data,
+                        headers: {
+                            RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                        },
+                        success: function (result) {
+                            $("#tagCreateModal").modal("hide");
+                            location.reload(true);
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

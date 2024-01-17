@@ -46,11 +46,9 @@ namespace StackOverflow.Infrastructure.Repositories
             return true;
         }
 
-        public bool Delete(T entity)
+        public void Delete(T entity)
         {
             _session.Delete(entity);
-
-            return true;
         }
 
         public bool Delete(IEnumerable<T> entities)

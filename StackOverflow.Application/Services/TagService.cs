@@ -23,6 +23,12 @@ namespace StackOverflow.Application.Services
             _unitOfWork.Commit();
         }
 
+        public void DeleteTag(Tag entity)
+        {
+            _unitOfWork.Tag.Delete(entity);
+            _unitOfWork.Commit();
+        }
+
         public IList<Tag> GetAllTag()
         {
             return _unitOfWork.Tag.All().ToList();

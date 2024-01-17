@@ -27,7 +27,7 @@ namespace StackOverflow.Infrastructure.Mapping
             {
                 map.Table("TagPosts"); // Specify the join table
                 map.Key(k => k.Column("PostId"));
-                map.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                map.Cascade(Cascade.None);
                 map.Inverse(true);
             }, relation => relation.ManyToMany(m => m.Column("TagId")));
 

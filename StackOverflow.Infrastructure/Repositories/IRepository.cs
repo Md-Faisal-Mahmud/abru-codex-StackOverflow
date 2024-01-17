@@ -17,7 +17,7 @@ namespace StackOverflow.Infrastructure.Repositories
 
         bool Update(IEnumerable<T> items);
 
-        bool Delete(T entity);
+        void Delete(T entity);
 
         bool Delete(IEnumerable<T> entities);
 
