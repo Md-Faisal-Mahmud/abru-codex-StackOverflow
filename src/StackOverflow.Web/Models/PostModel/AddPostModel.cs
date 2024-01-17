@@ -35,7 +35,7 @@ namespace StackOverflow.Web.Models.PostModel
                 Description = Description,
             };
 
-            _postService.AddPost(post);
+            //_postService.AddPost(post);
         }
     }
 }

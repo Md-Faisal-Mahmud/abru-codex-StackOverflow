@@ -28,12 +28,13 @@ namespace StackOverflow.Web.Models.PostModel
 
         public void GetPosts()
         {
-            Posts= _postService.GetAllPost();
+            //Posts= _postService.GetAllPost();
         }
 
         public Post GetPost(int id)
         {
-            return _postService.GetById(id);
+            //return _postService.GetById(id);
+            throw new NotImplementedException();
         }
     }
 }

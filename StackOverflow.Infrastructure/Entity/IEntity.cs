@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace StackOverflow.Infrastructure.Entity
 {
-    public class TagPost
+    public interface IEntity<T>
     {
-        public virtual Guid Id { get; set; }
-        public virtual Tag Tag { get; set; }
-        public virtual Post Post { get; set; }
+        T Id { get; set; }
     }
 }

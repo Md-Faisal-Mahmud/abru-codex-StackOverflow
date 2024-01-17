@@ -1,4 +1,5 @@
-﻿using NHibernate.Mapping.ByCode;
+﻿using NHibernate;
+using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using StackOverflow.Infrastructure.Entity;
 using System;
@@ -15,19 +16,24 @@ namespace StackOverflow.Infrastructure.Mapping
         {
             Table("Tags");
 
-            Id(x => x.Id, map => map.Generator(Generators.Identity));
+            Id(x => x.Id, x =>
+            {
+                x.Generator(Generators.Guid);
+                x.Type(NHibernateUtil.Guid);
+                x.Column("Id");
+                x.UnsavedValue(Guid.Empty);
+            });
 
             Property(x => x.TagName);
             Property(x => x.TagDescription);
 
             Bag(x => x.Posts, map =>
             {
-                map.Table("TagPosts");
+                map.Table("TagPosts"); // Specify the join table
                 map.Key(k => k.Column("TagId"));
-                map.Cascade(Cascade.None);
+                map.Cascade(Cascade.All | Cascade.DeleteOrphans);
                 map.Inverse(true);
             }, relation => relation.ManyToMany(m => m.Column("PostId")));
-
         }
     }
 }

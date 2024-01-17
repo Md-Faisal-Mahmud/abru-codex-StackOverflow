@@ -1,6 +1,6 @@
 ﻿using Autofac;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StackOverflow.Infrastructure.Entity;
 using StackOverflow.Web.Models.TagModel;
 
 namespace StackOverflow.Web.Controllers
@@ -14,37 +14,39 @@ namespace StackOverflow.Web.Controllers
             _scope = scope;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var model = _scope.Resolve<GetTagModel>();
             model.ResolveDependency(_scope);
 
-            model.GetTags();
+            await model.GetTags();
 
             return View(model);
         }
 
+        [Authorize(Roles ="Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(AddTagModel model)
+        public async Task<IActionResult> Create(AddTagModel model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 model.ResolveDependency(_scope);
-                model.Add();
+                await model.Add();
             }
 
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var model = _scope.Resolve<DeleteTagModel>();
             model.ResolveDependency(_scope);
 
-            model.DeleteTag(id);
+            await model.DeleteTag(id);
 
             return RedirectToAction("Index");
         }

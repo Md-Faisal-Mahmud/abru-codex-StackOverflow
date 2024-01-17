@@ -11,7 +11,6 @@
             <div>
                 @if (User.IsInRole("Admin"))
                 {
-                    @* <a asp-controller="Tag" asp-action="Create" class="btn btn-primary">Add New</a> *@
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tagCreateModal">Add New</button>
                 }
             </div><!-- /.col -->
@@ -35,7 +34,7 @@
                                 {
                                     <div class="float-right">
                                         <button value="@item.Id" type="button" class="btn btn-secondary">Edit</button>
-                                        <button type="button" class="btn btn-danger" onclick="confirmDelete(@item.Id)">Delete</button>
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@item.Id')">Delete</button>
                                     </div>
                                 }
                             </div>
@@ -106,7 +105,6 @@
                     RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
                 },
                 success: function () {
-                    // Handle success, e.g., reload content or show a success message
                     location.reload(true);
                 },
                 error: function (error) {
@@ -118,8 +116,8 @@
 
         $(document).ready(function () {
 
-
             
+
 
             $("#tagCreateForm").validate({
                 errorClass: "text-danger",

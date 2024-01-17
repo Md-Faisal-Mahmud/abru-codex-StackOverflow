@@ -16,27 +16,35 @@ namespace StackOverflow.Application.Services
         {
             _unitOfWork = unitOfWork;
         }
-
-        public void AddTag(Tag entity)
+        public async Task AddTag(Tag entity)
         {
-            _unitOfWork.Tag.Add(entity);
-            _unitOfWork.Commit();
+            await _unitOfWork.BeginTransaction();
+            await _unitOfWork.Tag.AddAsync(entity);
+            await _unitOfWork.Commit();
         }
 
-        public void DeleteTag(Tag entity)
+        public async Task DeleteTag(Guid id)
         {
-            _unitOfWork.Tag.Delete(entity);
-            _unitOfWork.Commit();
+            await _unitOfWork.BeginTransaction();
+
+            var tagEntity = await GetById(id);
+
+            if(tagEntity == null)
+            {
+                throw new InvalidOperationException("tag not found");
+            }
+            await _unitOfWork.Tag.DeleteAsync(tagEntity);
+            await _unitOfWork.Commit();
         }
 
-        public IList<Tag> GetAllTag()
+        public async Task<IList<Tag>> GetAllTag()
         {
-            return _unitOfWork.Tag.All().ToList();
+            return await _unitOfWork.Tag.GetAllAsync();
         }
 
-        public Tag GetById(int id)
+        public async Task<Tag?> GetById(Guid id)
         {
-            return _unitOfWork.Tag.FindBy(id);
+            return await _unitOfWork.Tag.GetSingleAsync(id);
         }
     }
 }

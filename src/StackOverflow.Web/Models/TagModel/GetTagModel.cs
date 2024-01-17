@@ -25,9 +25,9 @@ namespace StackOverflow.Web.Models.TagModel
             _tagService = scope.Resolve<ITagService>();
         }
 
-        internal void GetTags()
+        internal async Task GetTags()
         {
-            Tags= _tagService.GetAllTag();
+            Tags= await _tagService.GetAllTag();
         }
     }
 }

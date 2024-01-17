@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace StackOverflow.Infrastructure.Repositories
 {
-    public class PostRepository : Repository<Post>, IPostRepository
+    public class PostRepository : Repository<Post,Guid>, IPostRepository
     {
         private ISession _session;
         public PostRepository(ISession session) : base(session)

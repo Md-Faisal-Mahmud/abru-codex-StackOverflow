@@ -22,15 +22,9 @@ namespace StackOverflow.Web.Models.TagModel
             _tagService = scope.Resolve<ITagService>();
         }
 
-        internal void DeleteTag(int id)
+        internal async Task DeleteTag(Guid id)
         {
-            var tag = _tagService.GetById(id); 
-            if (tag == null)
-            {
-                throw new Exception("tag not found");
-            }
-
-            _tagService.DeleteTag(tag);
+           await _tagService.DeleteTag(id);
         }
     }
 }

@@ -3,6 +3,7 @@ using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Dialect;
 using NHibernate.Mapping.ByCode;
+using NHibernate.Tool.hbm2ddl;
 using StackOverflow.Infrastructure.Repositories;
 using StackOverflow.Infrastructure.UnitOfWorks;
 
@@ -22,11 +23,15 @@ namespace StackOverflow.Infrastructure.Extensions
                 c.Dialect<MsSql2012Dialect>();
                 c.ConnectionString = connectionString;
                 c.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
-                c.SchemaAction = SchemaAutoAction.Update;
+                c.SchemaAction = SchemaAutoAction.Validate;
                 c.LogFormattedSql = true;
                 c.LogSqlInConsole = true;
             });
+
             configuration.AddMapping(domainMapping);
+
+            var schemaUpdate = new SchemaUpdate(configuration);
+            schemaUpdate.Execute(false, true);
 
             var sessionFactory = configuration.BuildSessionFactory();
 

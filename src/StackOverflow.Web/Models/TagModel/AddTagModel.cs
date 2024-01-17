@@ -37,7 +37,7 @@ namespace StackOverflow.Web.Models.TagModel
             _tagService = scope.Resolve<ITagService>();
         }
 
-        internal void Add()
+        internal async Task Add()
         {
             var tag = new Tag
             {
@@ -45,7 +45,7 @@ namespace StackOverflow.Web.Models.TagModel
                 TagDescription = TagDescription
             };
 
-            _tagService.AddTag(tag);
+            await _tagService.AddTag(tag);
         }
     }
 }

@@ -1,10 +1,5 @@
 ﻿using StackOverflow.Infrastructure.Entity;
 using StackOverflow.Infrastructure.UnitOfWorks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StackOverflow.Application.Services
 {
@@ -17,20 +12,21 @@ namespace StackOverflow.Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public void AddPost(Post entity)
+        public async Task AddPost(Post entity)
         {
-            _unitOfWork.Post.Add(entity);
-            _unitOfWork.Commit();
+            await _unitOfWork.BeginTransaction();
+            await _unitOfWork.Post.AddAsync(entity);
+            await _unitOfWork.Commit();
         }
 
-        public IList<Post> GetAllPost()
+        public async Task<IList<Post>> GetAllPost()
         {
-            return _unitOfWork.Post.All().ToList();
+            return await _unitOfWork.Post.GetAllAsync();
         }
 
-        public Post GetById(int id)
+        public async Task<Post?> GetById(Guid id)
         {
-            return _unitOfWork.Post.FindBy(id);
+            return await _unitOfWork.Post.GetSingleAsync(id);
         }
     }
 }

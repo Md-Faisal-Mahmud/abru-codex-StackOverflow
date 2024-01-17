@@ -9,9 +9,11 @@ namespace StackOverflow.Infrastructure.UnitOfWorks
 {
     public interface IUnitOfWork : IDisposable
     {
-        void Commit();
+        Task BeginTransaction();
 
-        void Rollback();
+        Task Commit();
+
+        Task Rollback();
 
         IPostRepository Post { get; }
         IUserRepository User { get; }

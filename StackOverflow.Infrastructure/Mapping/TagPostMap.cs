@@ -1,11 +1,7 @@
-﻿using NHibernate.Mapping.ByCode;
+﻿using NHibernate;
+using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using StackOverflow.Infrastructure.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StackOverflow.Infrastructure.Mapping
 {
@@ -15,7 +11,13 @@ namespace StackOverflow.Infrastructure.Mapping
         {
             Table("TagPosts");
 
-            Id(x => x.Id, map => map.Generator(Generators.Identity));
+            Id(x => x.Id, x =>
+            {
+                x.Generator(Generators.Guid);
+                x.Type(NHibernateUtil.Guid);
+                x.Column("Id");
+                x.UnsavedValue(Guid.Empty);
+            });
 
             ManyToOne(x => x.Tag, map =>
             {

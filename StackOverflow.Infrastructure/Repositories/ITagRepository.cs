@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StackOverflow.Infrastructure.Repositories
 {
-    public interface ITagRepository : IRepository<Tag>
+    public interface ITagRepository : IRepository<Tag,Guid>
     {
     }
 }

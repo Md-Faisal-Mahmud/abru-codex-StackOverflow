@@ -11,7 +11,13 @@ namespace StackOverflow.Infrastructure.Mapping
         {
             Table("Posts");
 
-            Id(x => x.Id, map => map.Generator(Generators.Identity));
+            Id(x => x.Id, x =>
+            {
+                x.Generator(Generators.Guid);
+                x.Type(NHibernateUtil.Guid);
+                x.Column("Id");
+                x.UnsavedValue(Guid.Empty);
+            });
 
             Property(x => x.Title);
             Property(x => x.Description);
@@ -27,7 +33,7 @@ namespace StackOverflow.Infrastructure.Mapping
             {
                 map.Table("TagPosts"); // Specify the join table
                 map.Key(k => k.Column("PostId"));
-                map.Cascade(Cascade.None);
+                map.Cascade(Cascade.All | Cascade.DeleteOrphans);
                 map.Inverse(true);
             }, relation => relation.ManyToMany(m => m.Column("TagId")));
 

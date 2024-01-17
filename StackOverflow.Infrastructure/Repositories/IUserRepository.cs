@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StackOverflow.Infrastructure.Repositories
 {
-    public interface IUserRepository : IRepository<User>
+    public interface IUserRepository : IRepository<User,Guid>
     {
     }
 }

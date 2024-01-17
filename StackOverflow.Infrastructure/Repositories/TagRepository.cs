@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StackOverflow.Infrastructure.Repositories
 {
-    public class TagRepository : Repository<Tag>, ITagRepository
+    public class TagRepository : Repository<Tag, Guid>, ITagRepository
     {
         public TagRepository(ISession session) : base(session)
         {

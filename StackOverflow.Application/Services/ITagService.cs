@@ -4,9 +4,9 @@ namespace StackOverflow.Application.Services
 {
     public interface ITagService
     {
-        void AddTag(Tag entity);
-        void DeleteTag(Tag entity);
-        Tag GetById(int id);
-        IList<Tag> GetAllTag();
+        Task AddTag(Tag entity);
+        Task DeleteTag(Guid id);
+        Task<Tag?> GetById(Guid id);
+        Task<IList<Tag>> GetAllTag();
     }
 }
