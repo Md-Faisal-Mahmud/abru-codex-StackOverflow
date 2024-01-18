@@ -42,5 +42,27 @@ namespace StackOverflow.Web.Controllers
 
             return RedirectToAction("MyPost");
         }
+
+        [Authorize]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var model = _scope.Resolve<UpdatePostModel>();
+            model.ResolveDependency(_scope);
+
+            model.PostId = id;
+            await model.Load();
+
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Edit(UpdatePostModel model)
+        {
+            model.ResolveDependency(_scope);
+            await model.Update();
+
+            return RedirectToAction("MyPost");
+        }
     }
 }

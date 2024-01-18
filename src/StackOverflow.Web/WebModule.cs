@@ -23,6 +23,7 @@ namespace StackOverflow.Web
             builder.RegisterType<AddTagModel>().AsSelf();
             builder.RegisterType<GetTagModel>().AsSelf();
             builder.RegisterType<DeleteTagModel>().AsSelf();
+            builder.RegisterType<UpdatePostModel>().AsSelf();
 
             builder.RegisterType<AddAnswerModel>().AsSelf();
 

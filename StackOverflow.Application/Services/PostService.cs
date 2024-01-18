@@ -47,5 +47,12 @@ namespace StackOverflow.Application.Services
         {
             return await _unitOfWork.Post.FindAsync(x=>x.User.Id==userId);
         }
+
+        public async Task UpdatePost(Post entity)
+        {
+            await _unitOfWork.BeginTransaction();
+            await _unitOfWork.Post.UpdateAsync(entity);
+            await _unitOfWork.Commit();
+        }
     }
 }
