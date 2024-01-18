@@ -7,11 +7,11 @@
         <div class="row justify-content-between mb-2">
             <div class="">
                 <h3> All Questions</h3>
-            </div><!-- /.col -->
+            </div>
             <div class="">
                 <a asp-controller="Post" asp-action="Create" class="btn btn-primary">Ask Question</a>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
+            </div>
+        </div>
 
         <div class="row">
                 <div class="col">
@@ -33,7 +33,6 @@
                                                 <h5 class="card-title">@item.CreatedDate.ToLocalTime()</h5>
                                             </div>
                                         </div>
-                                        
                                     </div>
                                     <div class="col-12 mt-2">
                                         <div class="col-12">
@@ -51,45 +50,30 @@
                                 </div>
                             <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">View Answers</a>
                            </div>
-                        
                         </div>
                     }
-
-                    <!-- Repeat the above code for each question -->
                 </div>
-                @* <div class="card">
-                <div class="card-body">
-                <h5 class="card-title">Answered by User Name</h5>
-                <p class="card-text">Answer content goes here...</p>
-                <button class="btn btn-outline-primary">Upvote</button>
-                <button class="btn btn-outline-secondary">Downvote</button>
-                </div>
-                </div> *@
-
-            @* <aside class="col-md-4">
-            <h4>Popular Tags</h4>
-            <ul class="list-group">
-            <li class="list-group-item">Tag 1</li>
-            <li class="list-group-item">Tag 2</li>
-            <!-- Add more tags as needed -->
-            </ul>
-            <!-- Sidebar with popular tags, users, etc. -->
-            </aside> *@
-            
         </div>
+
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+
+                <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.CurrentPage - 1 })" tabindex="-1">Previous</a>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
+
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { pageIndex = i })">@i</a>
+                    </li>
+                }
+
+                <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.CurrentPage + 1 })">Next</a>
                 </li>
             </ul>
         </nav>
 
-    </div><!-- /.container-fluid -->
+    </div>
 </div>

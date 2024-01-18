@@ -44,7 +44,7 @@ namespace StackOverflow.Application.Services
             return await _unitOfWork.Post.GetSingleAsync(id);
         }
 
-        public Task<(IList<Post> data, int total, int totalDisplay)> 
+        public Task<(IList<Post> data, int total, int totalDisplay, int totalPages)> 
             GetPaginatePost(Expression<Func<Post, bool>> filter = null!,
                             int pageIndex = 1,
                             int pageSize = 10)

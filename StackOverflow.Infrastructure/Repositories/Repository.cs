@@ -68,19 +68,20 @@ namespace StackOverflow.Infrastructure.Repositories
             return await _session.Query<T>().Where(predicate ?? (x => true)).ToListAsync();
         }
 
-        public async Task<(IList<T> data, int total, int totalDisplay)> GetByPagingAsync(
+        public async Task<(IList<T> data, int total, int totalDisplay, int totalPages)> GetByPagingAsync(
                             Expression<Func<T, bool>> filter = null!,
                             int pageIndex = 1,
                             int pageSize = 10)
         {
             var query = _session.Query<T>().Where(filter ?? (x => true));
 
-
             var total = await query.CountAsync();
+
+            var totalPages = (int)Math.Ceiling((double)total / pageSize);
 
             var data = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
 
-            return (data, total, data.Count);
+            return (data, total, data.Count, totalPages);
         }
     }
 }

@@ -20,11 +20,14 @@ namespace StackOverflow.Web.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageIndex=1)
         {
             var model = _scope.Resolve<PostListModel>();
             model.ResolveDependency(_scope);
+
+            model.CurrentPage = pageIndex;
             await model.GetPosts();
+
             return View(model);
         }
 

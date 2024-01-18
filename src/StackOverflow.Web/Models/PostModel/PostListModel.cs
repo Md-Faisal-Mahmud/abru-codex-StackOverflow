@@ -8,6 +8,8 @@ namespace StackOverflow.Web.Models.PostModel
     public class PostListModel
     {
         public IList<Post> Posts { get; set; } = new List<Post>();
+        public int TotalPages { get; set; }
+        public int CurrentPage { get;set; } =1;
 
         private IPostService _postService;
 
@@ -28,7 +30,9 @@ namespace StackOverflow.Web.Models.PostModel
 
         public async Task GetPosts()
         {
-            var data = await _postService.GetPaginatePost(pageIndex:1);
+            var data = await _postService.GetPaginatePost(pageIndex: CurrentPage);
+
+            TotalPages = data.totalPages;
 
             Posts = data.data.Select(post => new Post
             {

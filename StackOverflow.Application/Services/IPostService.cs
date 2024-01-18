@@ -16,7 +16,7 @@ namespace StackOverflow.Application.Services
         Task<IList<Post>> GetAllPost();
         Task<IList<Post>> GetUserPost(Guid userId);
 
-        Task<(IList<Post> data, int total, int totalDisplay)> GetPaginatePost(Expression<Func<Post, bool>> filter = null!,
+        Task<(IList<Post> data, int total, int totalDisplay, int totalPages)> GetPaginatePost(Expression<Func<Post, bool>> filter = null!,
                             int pageIndex = 1,
                             int pageSize = 10);
         Task DeletePost(Guid id);

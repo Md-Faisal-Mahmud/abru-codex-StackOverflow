@@ -48,7 +48,11 @@
 
         <div class="row mt-4">
             <div class="col">
-                <h4>@Model.Answers.Count() Answer</h4>
+                <div class="row justify-content-between">
+                    <h4>@Model.Answers.Count() Answer</h4>
+                    <button class="btn btn-primary">Add Answer</button>
+                </div>
+                
                 <div class="mb-3">
                     @foreach (var answer in Model.Answers)
                     {
@@ -62,8 +66,8 @@
                         <div class="card-footer text-muted">
                                 <div class="row justify-content-between">
                                 <div>
-                                    <button class="btn btn-primary mr-2">Upvote</button>
-                                    <button class="btn btn-danger mr-2">Downvote</button>
+                                        <button class="btn btn-primary mr-2"><i class="fa fa-caret-up"></i></button>
+                                        <button class="btn btn-danger mr-2"><i class="fa fa-caret-down"></i></button>
                                 </div>
                                     @if (_context.HttpContext.Session.GetString("userId")==answer.User.Id.ToString())
                                     {
