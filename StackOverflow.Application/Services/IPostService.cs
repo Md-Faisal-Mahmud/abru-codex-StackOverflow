@@ -12,5 +12,7 @@ namespace StackOverflow.Application.Services
         Task AddPost(Post entity);
         Task<Post?> GetById(Guid id);
         Task<IList<Post>> GetAllPost();
+        Task<IList<Post>> GetUserPost(Guid userId);
+        Task DeletePost(Guid id);
     }
 }

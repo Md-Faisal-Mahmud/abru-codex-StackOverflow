@@ -25,6 +25,12 @@
                 <li class="nav-item">
                     <a asp-controller="Tag" asp-action="Index" class="nav-link">Tags</a>
                 </li>
+                @if(SignInManager.IsSignedIn(User))
+                {
+                    <li class="nav-item">
+                        <a asp-controller="User" asp-action="MyPost" class="nav-link">My Question</a>
+                    </li>
+                }
                 <li class="nav-item">
                     <a href="#" class="nav-link">Contact</a>
                 </li>

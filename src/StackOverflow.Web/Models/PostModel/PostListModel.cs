@@ -45,5 +45,20 @@ namespace StackOverflow.Web.Models.PostModel
         {
             return await _postService.GetById(id);
         }
+
+        public async Task GetUserPost(Guid userId)
+        {
+            var data = await _postService.GetUserPost(userId);
+
+            Posts = data.Select(post => new Post
+            {
+                Id = post.Id,
+                Title = post.Title,
+                Description = post.Description.Length > 200 ? post.Description.Substring(0, 200) : post.Description,
+                CreatedDate = post.CreatedDate,
+                Tag = post.Tag,
+                User = post.User
+            }).ToList();
+        }
     }
 }

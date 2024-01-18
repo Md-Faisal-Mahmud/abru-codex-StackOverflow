@@ -19,6 +19,20 @@ namespace StackOverflow.Application.Services
             await _unitOfWork.Commit();
         }
 
+        public async Task DeletePost(Guid id)
+        {
+            await _unitOfWork.BeginTransaction();
+
+            var postEntity = await GetById(id);
+
+            if (postEntity == null)
+            {
+                throw new InvalidOperationException("post not found");
+            }
+            await _unitOfWork.Post.DeleteAsync(postEntity);
+            await _unitOfWork.Commit();
+        }
+
         public async Task<IList<Post>> GetAllPost()
         {
             return await _unitOfWork.Post.GetAllAsync();
@@ -27,6 +41,11 @@ namespace StackOverflow.Application.Services
         public async Task<Post?> GetById(Guid id)
         {
             return await _unitOfWork.Post.GetSingleAsync(id);
+        }
+
+        public async Task<IList<Post>> GetUserPost(Guid userId)
+        {
+            return await _unitOfWork.Post.FindAsync(x=>x.User.Id==userId);
         }
     }
 }

@@ -13,24 +13,20 @@
 
         <div class="row">
             <div class="col">
-                <div class="card">
+                <div class="card my-3">
+                        <div class="card-header">
+                            <div class="row justify-content-between">
+                                <div>
+                                <h5>Question by <strong> @Model.User.DisplayName</strong> on @Model.CreatedDate.ToLongDateString()</h5>
+                            </div>
+                                <div>
+                                <h5><span class="badge badge-success">@Model.Tag.TagName</span></h5>
+                                </div>
+                            </div>
+                            
+                        </div>
                     <div class="card-body">
                         <div class="row mb-2">
-                            <div class="col">
-                                <div class="row justify-content-between">
-                                    <div>
-                                        <h5 class="card-title">By: @Model.User.DisplayName</h5>
-                                    </div>
-                                    <div>
-                                        <span class="badge badge-success">@Model.Tag.TagName</span>
-
-                                    </div>
-                                    <div>
-                                        <h5 class="card-title">@Model.CreatedDate.ToLocalTime()</h5>
-                                    </div>
-                                </div>
-
-                            </div>
                             <div class="col-12 mt-2">
                                 <div class="col-12">
                                     <h5 class="card-title text-bold">@Model.Title</h5>
@@ -52,23 +48,22 @@
 
         <div class="row mt-4">
             <div class="col">
-                <h4>Answers</h4>
+                <h4>@Model.Answers.Count() Answer</h4>
                 <div class="mb-3">
                     @foreach (var answer in Model.Answers)
                     {
-                        <div class="card mb-2">
-                            <div class="card-body">
-                                <p>@answer.AnswerText</p>
-                                <p>By: @answer.User.DisplayName</p>
-                                <p>Vote Count: 10</p>
-                                <form asp-action="Upvote" asp-route-answerId="@answer.Id" method="post">
-                                    <button type="submit">Upvote</button>
-                                </form>
-                                <form asp-action="Downvote" asp-route-answerId="@answer.Id" method="post">
-                                    <button type="submit">Downvote</button>
-                                </form>
-                            </div>
+                    <div class="card my-3">
+                        <div class="card-header">
+                                Answered by <strong> @answer.User.DisplayName</strong> on @Model.CreatedDate.ToLongDateString()
                         </div>
+                        <div class="card-body">
+                                @answer.AnswerText
+                        </div>
+                        <div class="card-footer text-muted">
+                            <button class="btn btn-primary mr-2">Upvote</button>
+                            <button class="btn btn-danger mr-2">Downvote</button>
+                        </div>
+                    </div>
                     }
                 </div>
 
@@ -83,6 +78,5 @@
                 </form>
             </div>
         </div>
-
     </div>
 </div><!-- /.container-fluid -->
