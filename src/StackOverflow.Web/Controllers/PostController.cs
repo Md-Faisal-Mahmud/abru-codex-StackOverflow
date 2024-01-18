@@ -51,11 +51,11 @@ namespace StackOverflow.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(Guid id)
         {
             var model = _scope.Resolve<PostListModel>();
             model.ResolveDependency(_scope);
-            var post = model.GetPost(id);
+            var post = await model.GetPost(id);
             if (post == null)
             {
                 return NotFound();
@@ -63,5 +63,7 @@ namespace StackOverflow.Web.Controllers
 
             return View(post);
         }
+
+        
     }
 }

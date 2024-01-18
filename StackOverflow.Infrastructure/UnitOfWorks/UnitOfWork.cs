@@ -11,22 +11,26 @@ namespace StackOverflow.Infrastructure.UnitOfWorks
         private readonly IPostRepository _postRepository;
         private readonly ITagRepository _tagRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IAnswerRepository _answerRepository;
 
         public UnitOfWork(ISession session,
             IPostRepository postRepository,
             ITagRepository tagRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IAnswerRepository answerRepository)
         {
             _session = session;
             _transaction = _session.BeginTransaction();
             _postRepository = postRepository;
             _tagRepository = tagRepository;
             _userRepository = userRepository;
+            _answerRepository = answerRepository;
         }
 
         public IPostRepository Post => _postRepository;
         public ITagRepository Tag => _tagRepository;
         public IUserRepository User => _userRepository;
+        public IAnswerRepository Answer => _answerRepository;
 
         public async Task BeginTransaction()
         {

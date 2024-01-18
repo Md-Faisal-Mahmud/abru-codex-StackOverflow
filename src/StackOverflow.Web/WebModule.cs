@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using StackOverflow.Web.Models;
+using StackOverflow.Web.Models.AnswerModel;
 using StackOverflow.Web.Models.PostModel;
 using StackOverflow.Web.Models.TagModel;
 
@@ -21,6 +22,8 @@ namespace StackOverflow.Web
             builder.RegisterType<AddTagModel>().AsSelf();
             builder.RegisterType<GetTagModel>().AsSelf();
             builder.RegisterType<DeleteTagModel>().AsSelf();
+
+            builder.RegisterType<AddAnswerModel>().AsSelf();
 
             base.Load(builder);
         }

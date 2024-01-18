@@ -22,21 +22,22 @@
                                 <div class="row mb-2">
                                     <div class="col">
                                         <div class="row justify-content-between">
-                                            <div class="col-4">
+                                            <div >
                                                 <h5 class="card-title">By: @item.User.DisplayName</h5>
                                             </div>
-                                            <div class="">
-                                                <h5 class="card-title">Tag: @item.Tag.TagName</h5>
+                                            <div >
+                                            <span class="badge badge-success">@item.Tag.TagName</span>
+                                                
                                             </div>
-                                            <div class="">
+                                            <div >
                                                 <h5 class="card-title">@item.CreatedDate.ToLocalTime()</h5>
                                             </div>
                                         </div>
                                         
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-12 mt-2">
                                         <div class="col-12">
-                                            <h5 class="card-title">@item.Title</h5>
+                                            <h5 class="card-title text-bold">@item.Title</h5>
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -91,9 +92,4 @@
         </nav>
 
     </div><!-- /.container-fluid -->
-</div>
-<div class="content">
-    <div class="container">
-        
-    </div>
 </div>

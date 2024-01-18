@@ -22,6 +22,9 @@ namespace StackOverflow.Infrastructure
             builder.RegisterType<TagRepository>().As<ITagRepository>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<AnswerRepository>().As<IAnswerRepository>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>()
                 .InstancePerLifetimeScope();
         }

@@ -41,10 +41,9 @@ namespace StackOverflow.Web.Models.PostModel
             }).ToList();
         }
 
-        public Post GetPost(int id)
+        public async Task<Post?> GetPost(Guid id)
         {
-            //return _postService.GetById(id);
-            throw new NotImplementedException();
+            return await _postService.GetById(id);
         }
     }
 }

@@ -18,6 +18,7 @@ namespace StackOverflow.Infrastructure.UnitOfWorks
         IPostRepository Post { get; }
         IUserRepository User { get; }
         ITagRepository Tag { get; }
+        IAnswerRepository Answer { get; }
 
     }
 }
