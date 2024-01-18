@@ -29,11 +29,10 @@ namespace StackOverflow.Infrastructure.Mapping
 
             Bag(x => x.Posts, map =>
             {
-                map.Table("TagPosts"); // Specify the join table
                 map.Key(k => k.Column("TagId"));
                 map.Cascade(Cascade.All | Cascade.DeleteOrphans);
-                map.Inverse(true);
-            }, relation => relation.ManyToMany(m => m.Column("PostId")));
+            }, relation => relation.OneToMany());
+
         }
     }
 }

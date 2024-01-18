@@ -26,9 +26,19 @@ namespace StackOverflow.Web.Models.PostModel
             _postService = scope.Resolve<IPostService>();
         }
 
-        public void GetPosts()
+        public async Task GetPosts()
         {
-            //Posts= _postService.GetAllPost();
+            var data = await _postService.GetAllPost();
+
+            Posts = data.Select(post => new Post
+            {
+                Id = post.Id,
+                Title = post.Title,
+                Description = post.Description.Length > 200 ? post.Description.Substring(0, 200) : post.Description,
+                CreatedDate = post.CreatedDate,
+                Tag = post.Tag,
+                User = post.User
+            }).ToList();
         }
 
         public Post GetPost(int id)

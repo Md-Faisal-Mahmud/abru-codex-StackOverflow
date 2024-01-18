@@ -1,11 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿
+using Microsoft.Extensions.DependencyInjection;
 using NHibernate.Cfg;
+using NHibernate.Mapping.ByCode;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Dialect;
-using NHibernate.Mapping.ByCode;
 using NHibernate.Tool.hbm2ddl;
-using StackOverflow.Infrastructure.Repositories;
-using StackOverflow.Infrastructure.UnitOfWorks;
 
 namespace StackOverflow.Infrastructure.Extensions
 {
@@ -23,7 +22,7 @@ namespace StackOverflow.Infrastructure.Extensions
                 c.Dialect<MsSql2012Dialect>();
                 c.ConnectionString = connectionString;
                 c.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
-                c.SchemaAction = SchemaAutoAction.Validate;
+                c.SchemaAction = SchemaAutoAction.Update;
                 c.LogFormattedSql = true;
                 c.LogSqlInConsole = true;
             });
@@ -39,6 +38,8 @@ namespace StackOverflow.Infrastructure.Extensions
             services.AddScoped(factory => sessionFactory.OpenSession());
 
             return services;
+
+
         }
     }
 }

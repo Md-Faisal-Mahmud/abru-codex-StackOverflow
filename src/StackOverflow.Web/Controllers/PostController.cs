@@ -20,28 +20,33 @@ namespace StackOverflow.Web.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var model = _scope.Resolve<PostListModel>();
             model.ResolveDependency(_scope);
-            model.GetPosts();
+            await model.GetPosts();
             return View(model);
         }
 
-        
-        public IActionResult Create()
+        [Authorize]
+        public async Task<IActionResult> Create()
         {
             var model = _scope.Resolve<AddPostModel>();
+            model.ResolveDependency(_scope);
+
+            await model.loadTags();
+
             return View(model);
         }
 
         [HttpPost]
         [Authorize]
-        public IActionResult Create(AddPostModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(AddPostModel model)
         {
             model.ResolveDependency(_scope);
             model.CreatedByUserId = new Guid(_userManager.GetUserId(User));
-            model.Add();
+            await model.Add();
 
             return RedirectToAction("Index");
         }

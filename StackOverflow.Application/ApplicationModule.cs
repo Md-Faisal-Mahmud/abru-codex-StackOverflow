@@ -17,6 +17,9 @@ namespace StackOverflow.Application
 
             builder.RegisterType<TagService>().As<ITagService>()
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<UserService>().As<IUserService>()
+                .InstancePerLifetimeScope();
         }
     }
 }

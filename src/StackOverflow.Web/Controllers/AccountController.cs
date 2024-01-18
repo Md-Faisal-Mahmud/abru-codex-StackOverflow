@@ -11,6 +11,7 @@ namespace StackOverflow.Web.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly IHttpContextAccessor _contextAccessor;
         private readonly ILifetimeScope _scope;
         private readonly ILogger<AccountController> _logger;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -19,12 +20,14 @@ namespace StackOverflow.Web.Controllers
         public AccountController(ILifetimeScope scope,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            IHttpContextAccessor contextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _scope = scope;
+            _contextAccessor = contextAccessor;
         }
 
         public IActionResult Register(string? returnUrl = null)
@@ -100,13 +103,8 @@ namespace StackOverflow.Web.Controllers
                 if (result.Succeeded)
                 {
                     var user = await _userManager.FindByEmailAsync(model.Email);
-                    var claims = (await _userManager.GetClaimsAsync(user)).ToArray();
 
-                    var userClaim = await _userManager.GetClaimsAsync(user);
-
-                    if (userClaim.Any(c => (c.Value == "Administrator" || c.Value == "Manager")) && model.ReturnUrl == Url.Content("~/"))
-                        model.ReturnUrl = Url.Content("~/Admin");
-                    else model.ReturnUrl ??= Url.Content("~/");
+                    _contextAccessor.HttpContext.Session.SetString("userId", user.Id.ToString());
 
                     return LocalRedirect(model.ReturnUrl);
                 }

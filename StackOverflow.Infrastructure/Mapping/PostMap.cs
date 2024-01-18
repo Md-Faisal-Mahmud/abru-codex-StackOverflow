@@ -19,8 +19,16 @@ namespace StackOverflow.Infrastructure.Mapping
                 x.UnsavedValue(Guid.Empty);
             });
 
-            Property(x => x.Title);
-            Property(x => x.Description);
+            Property(x => x.Title, map =>
+            {
+                map.Length(100);
+                map.Type(NHibernateUtil.String);
+            });
+            Property(x => x.Description, map =>
+            {
+                map.Length(4000);
+                map.Type(NHibernateUtil.String);
+            });
             Property(x => x.CreatedDate);
 
             ManyToOne(x => x.User, map =>
@@ -29,13 +37,11 @@ namespace StackOverflow.Infrastructure.Mapping
                 map.Cascade(Cascade.None);
             });
 
-            Bag(x => x.Tags, map =>
+            ManyToOne(x => x.Tag, map =>
             {
-                map.Table("TagPosts"); // Specify the join table
-                map.Key(k => k.Column("PostId"));
-                map.Cascade(Cascade.All | Cascade.DeleteOrphans);
-                map.Inverse(true);
-            }, relation => relation.ManyToMany(m => m.Column("TagId")));
+                map.Column("TagId");
+                map.Cascade(Cascade.None);
+            });
 
             Bag(x => x.Answers, map =>
             {

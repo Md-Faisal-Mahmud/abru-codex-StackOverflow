@@ -11,6 +11,6 @@ namespace StackOverflow.Infrastructure.Entity
         public virtual Guid Id { get; set; }
         public virtual string TagName { get; set; }
         public virtual string TagDescription { get; set; }
-        public virtual IList<TagPost> Posts { get; set; }
+        public virtual IList<Post> Posts { get; set; } = new List<Post>();
     }
 }

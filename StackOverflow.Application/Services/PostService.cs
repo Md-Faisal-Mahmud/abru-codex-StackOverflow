@@ -15,7 +15,7 @@ namespace StackOverflow.Application.Services
         public async Task AddPost(Post entity)
         {
             await _unitOfWork.BeginTransaction();
-            await _unitOfWork.Post.AddAsync(entity);
+            await _unitOfWork.Post.AddOrUpdateAsync(entity);
             await _unitOfWork.Commit();
         }
 

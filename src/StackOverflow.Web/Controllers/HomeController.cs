@@ -1,6 +1,4 @@
-﻿using Humanizer;
-using Microsoft.AspNetCore.Mvc;
-using StackOverflow.Infrastructure.Entity;
+﻿using Microsoft.AspNetCore.Mvc;
 using StackOverflow.Infrastructure.UnitOfWorks;
 using StackOverflow.Web.Models;
 using System.Diagnostics;
