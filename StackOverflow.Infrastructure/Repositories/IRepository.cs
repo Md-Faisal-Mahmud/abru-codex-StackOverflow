@@ -23,11 +23,6 @@ namespace StackOverflow.Infrastructure.Repositories
         Task<IList<T>> GetAllAsync();
 
         Task<IList<T>> FindAsync(Expression<Func<T, bool>>? predicate = null!);
-
-
-        Task<(IList<T> data, int total, int totalDisplay)> GetByPagingAsync(
-            Expression<Func<T, bool>> filter = null!, string orderBy = null!, int pageIndex = 1,
-            int pageSize = 10, Expression<Func<T, object>>? objectSelector = null!,
-            Expression<Func<T, bool>> selectorFilter = null!);
+        Task<(IList<T> data, int total, int totalDisplay)> GetByPagingAsync(Expression<Func<T, bool>> filter = null!, int pageIndex = 1, int pageSize = 10);
     }
 }

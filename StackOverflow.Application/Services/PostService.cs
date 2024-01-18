@@ -1,5 +1,6 @@
 ﻿using StackOverflow.Infrastructure.Entity;
 using StackOverflow.Infrastructure.UnitOfWorks;
+using System.Linq.Expressions;
 
 namespace StackOverflow.Application.Services
 {
@@ -41,6 +42,14 @@ namespace StackOverflow.Application.Services
         public async Task<Post?> GetById(Guid id)
         {
             return await _unitOfWork.Post.GetSingleAsync(id);
+        }
+
+        public Task<(IList<Post> data, int total, int totalDisplay)> 
+            GetPaginatePost(Expression<Func<Post, bool>> filter = null!,
+                            int pageIndex = 1,
+                            int pageSize = 10)
+        {
+            return _unitOfWork.Post.GetByPagingAsync(filter,pageIndex,pageSize);
         }
 
         public async Task<IList<Post>> GetUserPost(Guid userId)
