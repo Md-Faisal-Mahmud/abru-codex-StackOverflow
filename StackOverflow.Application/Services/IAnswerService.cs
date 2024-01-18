@@ -10,5 +10,6 @@ namespace StackOverflow.Application.Services
     public interface IAnswerService
     {
         Task AddAnswer(Answer entity);
+        Task DeleteTag(Guid id);
     }
 }

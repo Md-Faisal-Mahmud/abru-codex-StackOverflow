@@ -28,7 +28,7 @@ namespace StackOverflow.Web.Models.PostModel
 
         public async Task GetPosts()
         {
-            var data = await _postService.GetPaginatePost(pageIndex:2);
+            var data = await _postService.GetPaginatePost(pageIndex:1);
 
             Posts = data.data.Select(post => new Post
             {

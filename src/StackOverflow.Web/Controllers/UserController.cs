@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using StackOverflow.Infrastructure.Entity;
 using StackOverflow.Infrastructure.Features.Membership;
+using StackOverflow.Web.Models.AnswerModel;
 using StackOverflow.Web.Models.PostModel;
 
 namespace StackOverflow.Web.Controllers
@@ -63,6 +65,16 @@ namespace StackOverflow.Web.Controllers
             await model.Update();
 
             return RedirectToAction("MyPost");
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> DeleteAnswer(DeleteAnswerModel model)
+        {
+            model.ResolveDependency(_scope);
+            await model.DeleteTag(model.AnswerId);
+
+            return RedirectToAction("Details", "Post", new { id = model.PostId });
         }
     }
 }

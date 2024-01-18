@@ -23,5 +23,19 @@ namespace StackOverflow.Application.Services
             await _unitOfWork.Answer.AddAsync(entity);
             await _unitOfWork.Commit();
         }
+
+        public async Task DeleteTag(Guid id)
+        {
+            await _unitOfWork.BeginTransaction();
+
+            var answerEntity = await _unitOfWork.Answer.GetSingleAsync(id);
+
+            if (answerEntity == null)
+            {
+                throw new InvalidOperationException("answer not found");
+            }
+            await _unitOfWork.Answer.DeleteAsync(answerEntity);
+            await _unitOfWork.Commit();
+        }
     }
 }

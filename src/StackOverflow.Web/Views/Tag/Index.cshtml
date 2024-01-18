@@ -1,6 +1,7 @@
 ﻿@using StackOverflow.Web.Models.TagModel;
 @inject UserManager<ApplicationUser> UserManager;
 @model GetTagModel;
+@inject IHttpContextAccessor _context;
 
 <div class="content-header">
     <div class="container">
@@ -32,7 +33,7 @@
                                 <p class="card-text"><small class="badge bg-secondary">@item.Posts.Count()</small> questions</p>
                                 @if (User.IsInRole("Admin"))
                                 {
-                                    <div class="float-right">
+                                    <div class="row justify-content-between">
                                         <button value="@item.Id" type="button" class="btn btn-secondary">Edit</button>
                                         <button type="button" class="btn btn-danger" onclick="confirmDelete('@item.Id')">Delete</button>
                                     </div>
