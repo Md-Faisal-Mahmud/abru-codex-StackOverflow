@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿
+using Microsoft.Extensions.DependencyInjection;
 using NHibernate.Cfg;
+using NHibernate.Mapping.ByCode;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Dialect;
-using NHibernate.Mapping.ByCode;
-using StackOverflow.Infrastructure.Repositories;
-using StackOverflow.Infrastructure.UnitOfWorks;
+using NHibernate.Tool.hbm2ddl;
 
 namespace StackOverflow.Infrastructure.Extensions
 {
@@ -26,18 +26,20 @@ namespace StackOverflow.Infrastructure.Extensions
                 c.LogFormattedSql = true;
                 c.LogSqlInConsole = true;
             });
+
             configuration.AddMapping(domainMapping);
+
+            var schemaUpdate = new SchemaUpdate(configuration);
+            schemaUpdate.Execute(false, true);
 
             var sessionFactory = configuration.BuildSessionFactory();
 
             services.AddSingleton(sessionFactory);
             services.AddScoped(factory => sessionFactory.OpenSession());
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IPostRepository, PostRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
-
             return services;
+
+
         }
     }
 }

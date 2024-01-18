@@ -11,15 +11,35 @@ namespace StackOverflow.Infrastructure.Mapping
         {
             Table("Posts");
 
-            Id(x => x.Id, map => map.Generator(Generators.Identity));
+            Id(x => x.Id, x =>
+            {
+                x.Generator(Generators.Guid);
+                x.Type(NHibernateUtil.Guid);
+                x.Column("Id");
+                x.UnsavedValue(Guid.Empty);
+            });
 
-            Property(x => x.Title);
-            Property(x => x.Description);
+            Property(x => x.Title, map =>
+            {
+                map.Length(100);
+                map.Type(NHibernateUtil.String);
+            });
+            Property(x => x.Description, map =>
+            {
+                map.Length(4000);
+                map.Type(NHibernateUtil.String);
+            });
             Property(x => x.CreatedDate);
 
             ManyToOne(x => x.User, map =>
             {
                 map.Column("UserId");
+                map.Cascade(Cascade.None);
+            });
+
+            ManyToOne(x => x.Tag, map =>
+            {
+                map.Column("TagId");
                 map.Cascade(Cascade.None);
             });
 

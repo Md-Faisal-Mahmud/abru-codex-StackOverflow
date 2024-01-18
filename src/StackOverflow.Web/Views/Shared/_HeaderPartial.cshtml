@@ -5,8 +5,8 @@
 <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
     <div class="container">
         <a href="" class="navbar-brand">
-            <img src="~/adminLte3/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-            <span class="brand-text font-weight-light">AdminLTE</span>
+            <img src="~/stackoverflow.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <span class="brand-text font-weight-light">Stack Overflow</span>
         </a>
 
         <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,15 @@
                 <li class="nav-item">
                     <a asp-controller="Post" asp-action="Index" class="nav-link">Question</a>
                 </li>
+                <li class="nav-item">
+                    <a asp-controller="Tag" asp-action="Index" class="nav-link">Tags</a>
+                </li>
+                @if(SignInManager.IsSignedIn(User))
+                {
+                    <li class="nav-item">
+                        <a asp-controller="User" asp-action="MyPost" class="nav-link">My Question</a>
+                    </li>
+                }
                 <li class="nav-item">
                     <a href="#" class="nav-link">Contact</a>
                 </li>

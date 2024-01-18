@@ -1,32 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using StackOverflow.Infrastructure.Entity;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StackOverflow.Infrastructure.Repositories
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<T, in TKey>
+    where T : class, IEntity<TKey>
     {
-        void Add(T entity);
+        Task AddAsync(T entity);
 
-        bool Add(IEnumerable<T> items);
+        Task UpdateAsync(T entity);
 
-        bool Update(T entity);
+        Task DeleteAsync(T entity);
 
-        bool Update(IEnumerable<T> items);
+        Task AddOrUpdateAsync(T entity);
 
-        bool Delete(T entity);
+        Task<int> GetCountAsync(Expression<Func<T, bool>>? predicate = null!);
 
-        bool Delete(IEnumerable<T> entities);
+        Task<T?> GetSingleAsync(TKey id);
 
-        IQueryable<T> All();
+        Task<T?> GetSingleAsync(Expression<Func<T, bool>> predicate);
 
-        T FindBy(Expression<Func<T, bool>> expression);
+        Task<IList<T>> GetAllAsync();
 
-        T FindBy(int id);
-
-        IQueryable<T> FilterBy(Expression<Func<T, bool>> expression);
+        Task<IList<T>> FindAsync(Expression<Func<T, bool>>? predicate = null!);
+        Task<(IList<T> data, int total, int totalDisplay)> GetByPagingAsync(Expression<Func<T, bool>> filter = null!, int pageIndex = 1, int pageSize = 10);
     }
 }

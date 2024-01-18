@@ -48,6 +48,22 @@ namespace StackOverflow.Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a4607923-9239-4c6d-95cf-0d2ccf55c0d6"),
+                            ConcurrencyStamp = "10a13403-9911-4fd8-a4b2-73fca5a1483e",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = new Guid("aa4e5374-e8b5-42a4-87b9-702f5f79a718"),
+                            ConcurrencyStamp = "4b2ebc6d-817c-4ebd-bb82-60dce0083637",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("StackOverflow.Infrastructure.Features.Membership.ApplicationRoleClaim", b =>
@@ -142,6 +158,25 @@ namespace StackOverflow.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("2c1f8aef-591c-4545-8bb0-d48d3a54afc3"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "af1346c0-769b-4619-916f-0df105e4dac8",
+                            DisplayName = "Super Admin",
+                            Email = "admin@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@GMAIL.COM",
+                            NormalizedUserName = "ADMIN@GMAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFeomvpLIVr1is6zcjtxuD/W7IvMOkNncsIb9BQ1JWk7WlHeXE3wtGIVh2AjOkUwcQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "BFCC7B453A8B4B6C8A4C93EE28A3B4A8",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("StackOverflow.Infrastructure.Features.Membership.ApplicationUserClaim", b =>
@@ -202,6 +237,13 @@ namespace StackOverflow.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("2c1f8aef-591c-4545-8bb0-d48d3a54afc3"),
+                            RoleId = new Guid("a4607923-9239-4c6d-95cf-0d2ccf55c0d6")
+                        });
                 });
 
             modelBuilder.Entity("StackOverflow.Infrastructure.Features.Membership.ApplicationUserToken", b =>

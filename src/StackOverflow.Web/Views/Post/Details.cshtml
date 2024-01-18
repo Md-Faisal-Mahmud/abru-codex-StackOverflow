@@ -1,27 +1,125 @@
 ﻿@model Post
+@inject IHttpContextAccessor _context;
+<div class="content-header">
+    <div class="container">
+        <div class="row justify-content-between mb-2">
+            <div class="">
+                <h3>Question Details</h3>
+            </div><!-- /.col -->
+            <div class="">
+                <a asp-controller="Post" asp-action="Create" class="btn btn-primary">Ask Question</a>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <h1>@Model.Title</h1>
-            <p>Asked by <strong>Test</strong> on @Model.CreatedDate.ToShortDateString()</p>
-            <p>@Model.Description</p>
-
-            @* @foreach (var answer in Model.Answers)
-            { *@
+        <div class="row">
+            <div class="col">
                 <div class="card my-3">
-                    <div class="card-header">
-                        Answered by <strong>Demo</strong> on @Model.CreatedDate.ToShortDateString()
-                    </div>
+                        <div class="card-header">
+                            <div class="row justify-content-between">
+                                <div>
+                                <h5>Question by <strong> @Model.User.DisplayName</strong> on @Model.CreatedDate.ToLongDateString()</h5>
+                            </div>
+                                <div>
+                                <h5><span class="badge badge-success">@Model.Tag.TagName</span></h5>
+                                </div>
+                            </div>
+                            
+                        </div>
                     <div class="card-body">
-                        @Model.Description
-                    </div>
-                    <div class="card-footer text-muted">
-                        <button class="btn btn-primary mr-2">Upvote</button>
-                        <button class="btn btn-danger mr-2">Downvote</button>
+                        <div class="row mb-2">
+                            <div class="col-12 mt-2">
+                                <div class="col-12">
+                                    <h5 class="card-title text-bold">@Model.Title</h5>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="col-12">
+                                    @if (Model.Description != null)
+                                    {
+                                        <p class="card-text"> @Html.Raw(Markdig.Markdown.ToHtml(Model.Description))</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            @* } *@
+            </div>       
+        </div>
+
+        <div class="row mt-4">
+            <div class="col">
+                <h4>@Model.Answers.Count() Answer</h4>
+                <div class="mb-3">
+                    @foreach (var answer in Model.Answers)
+                    {
+                    <div class="card my-3">
+                        <div class="card-header">
+                                Answered by <strong> @answer.User.DisplayName</strong> on @Model.CreatedDate.ToLongDateString()
+                        </div>
+                        <div class="card-body">
+                                @answer.AnswerText
+                        </div>
+                        <div class="card-footer text-muted">
+                                <div class="row justify-content-between">
+                                <div>
+                                    <button class="btn btn-primary mr-2">Upvote</button>
+                                    <button class="btn btn-danger mr-2">Downvote</button>
+                                </div>
+                                    @if (_context.HttpContext.Session.GetString("userId")==answer.User.Id.ToString())
+                                    {
+                                        <div>
+                                            @Html.AntiForgeryToken()
+                                            <button value="@answer.Id" type="button" class="btn btn-secondary">Edit</button>
+                                            <button type="button" class="btn btn-danger" onclick="confirmDelete('@answer.Id','@Model.Id')">Delete</button>
+                                        </div>
+                                    }
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+
+                <h4>Add Answer</h4>
+                <form asp-controller="Answer" asp-action="AddAnswer" method="post">
+                    <div class="form-group">
+                        <input type="hidden" value="@Model.Id" name="postId" />
+                        <label for="answerBody">Your Answer:</label>
+                        <textarea name="answer" class="form-control" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Answer</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+</div><!-- /.container-fluid -->
+
+@section Scripts {
+
+    <script>
+
+        function confirmDelete(answerId,postId) {
+            if (confirm("Are you sure you want to delete this answer?")) {
+                deleteAnswer(answerId, postId);
+            }
+        }
+
+        function deleteAnswer(answerId, postId) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("DeleteAnswer", "User")",
+                data: { answerId: answerId, postId: postId },
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function () {
+                location.reload(true);
+            },
+            error: function (error) {
+                // Handle errors, e.g., display an error message
+                console.log(error);
+            }
+        });
+    }
+</script>
+
+}

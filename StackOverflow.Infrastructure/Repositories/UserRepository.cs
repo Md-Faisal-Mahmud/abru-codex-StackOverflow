@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StackOverflow.Infrastructure.Repositories
 {
-    public class UserRepository : Repository<User>, IUserRepository
+    public class UserRepository : Repository<User,Guid>, IUserRepository
     {
         public UserRepository(ISession session) : base(session)
         {

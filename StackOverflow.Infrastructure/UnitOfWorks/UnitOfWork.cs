@@ -5,54 +5,53 @@ namespace StackOverflow.Infrastructure.UnitOfWorks
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly ISessionFactory _sessionFactory;
-
+        private readonly ISession _session;
         private readonly ITransaction _transaction;
 
-        public ISession Session { get; private set; }
+        private readonly IPostRepository _postRepository;
+        private readonly ITagRepository _tagRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IAnswerRepository _answerRepository;
 
-        public IPostRepository Post { get; private set; }
-        public IUserRepository User { get; private set; }
-
-        public UnitOfWork(ISessionFactory sessionFactory,IPostRepository postRepository,
-                          IUserRepository userRepository)
+        public UnitOfWork(ISession session,
+            IPostRepository postRepository,
+            ITagRepository tagRepository,
+            IUserRepository userRepository,
+            IAnswerRepository answerRepository)
         {
-            _sessionFactory = sessionFactory;
+            _session = session;
+            _transaction = _session.BeginTransaction();
+            _postRepository = postRepository;
+            _tagRepository = tagRepository;
+            _userRepository = userRepository;
+            _answerRepository = answerRepository;
+        }
 
-            Session = _sessionFactory.OpenSession();
+        public IPostRepository Post => _postRepository;
+        public ITagRepository Tag => _tagRepository;
+        public IUserRepository User => _userRepository;
+        public IAnswerRepository Answer => _answerRepository;
 
-            Session.FlushMode = FlushMode.Auto;
+        public async Task BeginTransaction()
+        {
+            await Task.Run(() => _transaction.Begin());
+        }
 
-            _transaction = Session.BeginTransaction();
+        public async Task Commit()
+        {
+            await Task.Run(() => _transaction.Commit());
+        }
 
-            Post = postRepository;
-            User = userRepository;
+        public async Task Rollback()
+        {
+            await Task.Run(() => _transaction.Rollback());
         }
 
         public void Dispose()
         {
-            if (Session.IsOpen)
-            {
-                Session.Close();
-            }
+            _transaction.Dispose();
+            _session.Dispose();
         }
 
-        public void Commit()
-        {
-            if (!_transaction.IsActive)
-            {
-                throw new InvalidOperationException("No active transaction");
-            }
-
-            _transaction.Commit();
-        }
-
-        public void Rollback()
-        {
-            if (_transaction.IsActive)
-            {
-                _transaction.Rollback();
-            }
-        }
     }
 }

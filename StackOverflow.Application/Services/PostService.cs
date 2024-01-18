@@ -1,10 +1,6 @@
 ﻿using StackOverflow.Infrastructure.Entity;
 using StackOverflow.Infrastructure.UnitOfWorks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace StackOverflow.Application.Services
 {
@@ -17,20 +13,55 @@ namespace StackOverflow.Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public void AddPost(Post entity)
+        public async Task AddPost(Post entity)
         {
-            _unitOfWork.Post.Add(entity);
-            _unitOfWork.Commit();
+            await _unitOfWork.BeginTransaction();
+            await _unitOfWork.Post.AddOrUpdateAsync(entity);
+            await _unitOfWork.Commit();
         }
 
-        public IList<Post> GetAllPost()
+        public async Task DeletePost(Guid id)
         {
-            return _unitOfWork.Post.GetPostWithUser();
+            await _unitOfWork.BeginTransaction();
+
+            var postEntity = await GetById(id);
+
+            if (postEntity == null)
+            {
+                throw new InvalidOperationException("post not found");
+            }
+            await _unitOfWork.Post.DeleteAsync(postEntity);
+            await _unitOfWork.Commit();
         }
 
-        public Post GetById(int id)
+        public async Task<IList<Post>> GetAllPost()
         {
-            return _unitOfWork.Post.FindBy(id);
+            return await _unitOfWork.Post.GetAllAsync();
+        }
+
+        public async Task<Post?> GetById(Guid id)
+        {
+            return await _unitOfWork.Post.GetSingleAsync(id);
+        }
+
+        public Task<(IList<Post> data, int total, int totalDisplay)> 
+            GetPaginatePost(Expression<Func<Post, bool>> filter = null!,
+                            int pageIndex = 1,
+                            int pageSize = 10)
+        {
+            return _unitOfWork.Post.GetByPagingAsync(filter,pageIndex,pageSize);
+        }
+
+        public async Task<IList<Post>> GetUserPost(Guid userId)
+        {
+            return await _unitOfWork.Post.FindAsync(x=>x.User.Id==userId);
+        }
+
+        public async Task UpdatePost(Post entity)
+        {
+            await _unitOfWork.BeginTransaction();
+            await _unitOfWork.Post.UpdateAsync(entity);
+            await _unitOfWork.Commit();
         }
     }
 }

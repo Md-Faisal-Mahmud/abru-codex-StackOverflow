@@ -14,7 +14,15 @@ namespace StackOverflow.Application
         {
             builder.RegisterType<PostService>().As<IPostService>()
                 .InstancePerLifetimeScope();
-            base.Load(builder);
+
+            builder.RegisterType<TagService>().As<ITagService>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<AnswerService>().As<IAnswerService>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<UserService>().As<IUserService>()
+                .InstancePerLifetimeScope();
         }
     }
 }

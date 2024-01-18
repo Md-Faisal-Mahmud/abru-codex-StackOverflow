@@ -1,4 +1,5 @@
-﻿using NHibernate.Mapping.ByCode;
+﻿using NHibernate;
+using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using StackOverflow.Infrastructure.Entity;
 using System;
@@ -15,7 +16,13 @@ namespace StackOverflow.Infrastructure.Mapping
         {
             Table("Answers");
 
-            Id(x => x.Id, map => map.Generator(Generators.Identity));
+            Id(x => x.Id, x =>
+            {
+                x.Generator(Generators.Guid);
+                x.Type(NHibernateUtil.Guid);
+                x.Column("Id");
+                x.UnsavedValue(Guid.Empty);
+            });
 
             Property(x => x.AnswerText);
             Property(x => x.CreatedDate);

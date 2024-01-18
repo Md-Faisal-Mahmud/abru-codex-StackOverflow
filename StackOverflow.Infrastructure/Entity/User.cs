@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StackOverflow.Infrastructure.Entity
 {
-    public class User
+    public class User : IEntity<Guid>
     {
         public virtual Guid Id { get; set; }
         public virtual string UserName { get; set; }

@@ -11,6 +11,7 @@ namespace StackOverflow.Web.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly IHttpContextAccessor _contextAccessor;
         private readonly ILifetimeScope _scope;
         private readonly ILogger<AccountController> _logger;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -19,12 +20,14 @@ namespace StackOverflow.Web.Controllers
         public AccountController(ILifetimeScope scope,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            IHttpContextAccessor contextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _scope = scope;
+            _contextAccessor = contextAccessor;
         }
 
         public IActionResult Register(string? returnUrl = null)
@@ -42,29 +45,21 @@ namespace StackOverflow.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var at = model.Email.IndexOf('@');
-                var userName = model.Email.Substring(0, at);
-
                 var user = new ApplicationUser
                 {
-                    UserName = userName,
+                    UserName = model.Email,
                     Email = model.Email,
                     DisplayName = model.DisplayName,
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
 
-                // Adding default CLAIM to USER
-                var claim = new Claim("User", "User");
-                var claimResult = await _userManager.AddClaimAsync(user, claim);
+                var roleResult = await _userManager.AddToRoleAsync(user, "User");
 
-                if (result.Succeeded && claimResult.Succeeded)
+                if (result.Succeeded && roleResult.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
-
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(model.ReturnUrl);
-
                 }
 
                 foreach (var error in result.Errors)
@@ -99,9 +94,7 @@ namespace StackOverflow.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var at = model.Email.LastIndexOf('@');
-                var userName = model.Email.Substring(0, at);
-                var result = await _signInManager.PasswordSignInAsync(userName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.IsNotAllowed)
                 {
                     return RedirectToAction("RegisterConfirmation", "Account", new { email = model.Email });
@@ -110,13 +103,8 @@ namespace StackOverflow.Web.Controllers
                 if (result.Succeeded)
                 {
                     var user = await _userManager.FindByEmailAsync(model.Email);
-                    var claims = (await _userManager.GetClaimsAsync(user)).ToArray();
 
-                    var userClaim = await _userManager.GetClaimsAsync(user);
-
-                    if (userClaim.Any(c => (c.Value == "Administrator" || c.Value == "Manager")) && model.ReturnUrl == Url.Content("~/"))
-                        model.ReturnUrl = Url.Content("~/Admin");
-                    else model.ReturnUrl ??= Url.Content("~/");
+                    _contextAccessor.HttpContext.Session.SetString("userId", user.Id.ToString());
 
                     return LocalRedirect(model.ReturnUrl);
                 }
@@ -130,7 +118,7 @@ namespace StackOverflow.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken, Authorize]
-        public async Task<IActionResult> LogoutAsync(string returnUrl = null)
+        public async Task<IActionResult> Logout(string? returnUrl = null)
         {
             await _signInManager.SignOutAsync();
             if (returnUrl != null)

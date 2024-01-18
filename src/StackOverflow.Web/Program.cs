@@ -2,6 +2,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using StackOverflow.Application;
+using StackOverflow.Infrastructure;
 using StackOverflow.Infrastructure.Extensions;
 
 namespace StackOverflow.Web
@@ -22,13 +23,23 @@ namespace StackOverflow.Web
             {
                 x.RegisterModule(new WebModule());
                 x.RegisterModule(new ApplicationModule());
+                x.RegisterModule(new InfrastructureModule());
             });
+
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             builder.Services.AddIdentity(connectionString);
 
             builder.Services.AddNHibernate(connectionString);
 
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
             var app = builder.Build();
 
@@ -46,7 +57,7 @@ namespace StackOverflow.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthentication();

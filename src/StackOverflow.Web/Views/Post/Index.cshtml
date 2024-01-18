@@ -1,5 +1,5 @@
 ﻿@inject SignInManager<ApplicationUser> SignInManager;
-
+@using Markdig
 @model PostListModel
 
 <div class="content-header">
@@ -19,18 +19,37 @@
                     {
                         <div class="card">
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-10">
-                                        <h5 class="card-title">@item.Title</h5>
-                                    </div>
-                                    <div class="col-2">
-                                        <h5 class="card-title">@item.CreatedDate</h5>
-                                    </div>
+                                <div class="row mb-2">
                                     <div class="col">
-                                        <p class="card-text">@item.Description</p>
+                                        <div class="row justify-content-between">
+                                            <div >
+                                                <h5 class="card-title">By: @item.User.DisplayName</h5>
+                                            </div>
+                                            <div >
+                                            <span class="badge badge-success">@item.Tag.TagName</span>
+                                                
+                                            </div>
+                                            <div >
+                                                <h5 class="card-title">@item.CreatedDate.ToLocalTime()</h5>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <div class="col-12">
+                                            <h5 class="card-title text-bold">@item.Title</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="col-12">
+                                        @if (item.Description != null)
+                                        {
+                                            <p class="card-text"> @Html.Raw(Markdig.Markdown.ToHtml(item.Description))</p>
+                                        }
+                                         </div>
                                     </div>
                                 </div>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm mt-5">View Answers</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">View Answers</a>
                            </div>
                         
                         </div>
@@ -73,9 +92,4 @@
         </nav>
 
     </div><!-- /.container-fluid -->
-</div>
-<div class="content">
-    <div class="container">
-        
-    </div>
 </div>
