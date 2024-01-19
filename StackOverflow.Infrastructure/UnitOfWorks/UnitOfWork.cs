@@ -12,12 +12,14 @@ namespace StackOverflow.Infrastructure.UnitOfWorks
         private readonly ITagRepository _tagRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAnswerRepository _answerRepository;
+        private readonly IAnswerVoteRepository _answerVoteRepository;
 
         public UnitOfWork(ISession session,
             IPostRepository postRepository,
             ITagRepository tagRepository,
             IUserRepository userRepository,
-            IAnswerRepository answerRepository)
+            IAnswerRepository answerRepository,
+            IAnswerVoteRepository answerVoteRepository)
         {
             _session = session;
             _transaction = _session.BeginTransaction();
@@ -25,13 +27,14 @@ namespace StackOverflow.Infrastructure.UnitOfWorks
             _tagRepository = tagRepository;
             _userRepository = userRepository;
             _answerRepository = answerRepository;
+            _answerVoteRepository = answerVoteRepository;
         }
 
         public IPostRepository Post => _postRepository;
         public ITagRepository Tag => _tagRepository;
         public IUserRepository User => _userRepository;
         public IAnswerRepository Answer => _answerRepository;
-
+        public IAnswerVoteRepository AnswerVote => _answerVoteRepository;
         public async Task BeginTransaction()
         {
             await Task.Run(() => _transaction.Begin());

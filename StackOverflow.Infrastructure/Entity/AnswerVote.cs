@@ -2,7 +2,7 @@
 
 namespace StackOverflow.Infrastructure.Entity
 {
-    public class AnswerVote
+    public class AnswerVote:IEntity<Guid>
     {
         public virtual Guid Id { get; set; }
         public virtual Answer Answer { get; set; }

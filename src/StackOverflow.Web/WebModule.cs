@@ -26,6 +26,7 @@ namespace StackOverflow.Web
             builder.RegisterType<UpdatePostModel>().AsSelf();
             builder.RegisterType<DeleteAnswerModel>().AsSelf();
             builder.RegisterType<UpdateAnswerModel>().AsSelf();
+            builder.RegisterType<AnswerVoteModel>().AsSelf();
 
             builder.RegisterType<AddAnswerModel>().AsSelf();
 

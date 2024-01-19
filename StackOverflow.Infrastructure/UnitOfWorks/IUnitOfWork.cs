@@ -19,6 +19,7 @@ namespace StackOverflow.Infrastructure.UnitOfWorks
         IUserRepository User { get; }
         ITagRepository Tag { get; }
         IAnswerRepository Answer { get; }
+        IAnswerVoteRepository AnswerVote { get; }
 
     }
 }

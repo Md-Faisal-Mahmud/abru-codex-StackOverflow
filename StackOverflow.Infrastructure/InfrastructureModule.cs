@@ -25,6 +25,9 @@ namespace StackOverflow.Infrastructure
             builder.RegisterType<AnswerRepository>().As<IAnswerRepository>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<AnswerVoteRepository>().As<IAnswerVoteRepository>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>()
                 .InstancePerLifetimeScope();
         }
