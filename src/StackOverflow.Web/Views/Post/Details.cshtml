@@ -1,5 +1,6 @@
 ﻿@model Post
 @inject IHttpContextAccessor _context;
+@inject SignInManager<ApplicationUser> _signInManager
 <div class="content-header">
     <div class="container">
         <div class="row justify-content-between mb-2">
@@ -10,7 +11,10 @@
                 <a asp-controller="Post" asp-action="Create" class="btn btn-primary">Ask Question</a>
             </div><!-- /.col -->
         </div><!-- /.row -->
-
+@{
+    var postUpvotes = Model.Votes.Count(x => x.VoteType == StackOverflow.Infrastructure.Enum.VoteType.Up);
+    var postDownvotes = Model.Votes.Count(x => x.VoteType == StackOverflow.Infrastructure.Enum.VoteType.Down);
+}
         <div class="row">
             <div class="col">
                 <div class="card my-3">
@@ -25,23 +29,37 @@
                             </div>
                             
                         </div>
-                    <div class="card-body">
-                        <div class="row mb-2">
-                            <div class="col-12 mt-2">
-                                <div class="col-12">
-                                    <h5 class="card-title text-bold">@Model.Title</h5>
+                        <div class="card-body">
+                            <div class="row mb-2">
+                                <div class="col-12 mt-2">
+                                    <div class="col-12">
+                                        <h5 class="card-title text-bold">@Model.Title</h5>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-12">
                                 <div class="col-12">
-                                    @if (Model.Description != null)
-                                    {
-                                        <p class="card-text"> @Html.Raw(Markdig.Markdown.ToHtml(Model.Description))</p>
-                                    }
+                                    <div class="col-12">
+                                        @if (Model.Description != null)
+                                        {
+                                            <p class="card-text">@Html.Raw(Markdig.Markdown.ToHtml(Model.Description))</p>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="card-footer text-muted">
+                                <div class="row justify-content-between">
+                                    <div>
+                                        @if(_context.HttpContext.Session.GetString("userId")!=Model.User.Id.ToString())
+                                        {
+                                            <button class="btn btn-primary mr-2" onclick="postVote('@Model.Id','Up')" ><i class="fa fa-caret-up"> @postUpvotes</i></button>
+                                            <button class="btn btn-danger mr-2" onclick="postVote('@Model.Id','Down')" ><i class="fa fa-caret-down"> @postDownvotes</i></button>
+                                        }else{
+                                            <button class="btn btn-primary mr-2" disabled ><i class="fa fa-caret-up"> @postUpvotes</i></button>
+                                            <button class="btn btn-danger mr-2" disabled ><i class="fa fa-caret-down"> @postDownvotes</i></button>
+                                        }
+                                    </div>
+                                <div>
+                        </div>
                 </div>
             </div>       
         </div>
@@ -49,31 +67,62 @@
         <div class="row mt-4">
             <div class="col">
                 <div class="row justify-content-between">
+
                     <h4>@Model.Answers.Count() Answer</h4>
-                    <button class="btn btn-primary">Add Answer</button>
+                    <a asp-controller="Answer" asp-action="AddAnswer" asp-route-postId="@Model.Id" class="btn btn-primary">Add Answer</a>
                 </div>
                 
                 <div class="mb-3">
                     @foreach (var answer in Model.Answers)
                     {
+                        var upvotes = answer.Votes.Count(x => x.VoteType == StackOverflow.Infrastructure.Enum.VoteType.Up);
+                        var downvotes = answer.Votes.Count(x => x.VoteType == StackOverflow.Infrastructure.Enum.VoteType.Down);
+                        var voteScore = upvotes - downvotes;
+
                     <div class="card my-3">
                         <div class="card-header">
+                            <div class="row justify-content-between">
+                                
+                            <div>
                                 Answered by <strong> @answer.User.DisplayName</strong> on @Model.CreatedDate.ToLongDateString()
+                            </div>
+                                    @if (answer.AcceptedAnswer)
+                                    {
+                                        <div>
+                                            <button type="button" class="btn btn-success">Accepted <i class="fa fa-check"></i></button>
+                                        </div>
+                                    }
+                            </div>
+                                
                         </div>
                         <div class="card-body">
-                                @answer.AnswerText
+                                @Html.Raw(Markdig.Markdown.ToHtml(@answer.AnswerText))
                         </div>
                         <div class="card-footer text-muted">
-                                <div class="row justify-content-between">
+                            <div class="row justify-content-between">
                                 <div>
-                                        <button class="btn btn-primary mr-2"><i class="fa fa-caret-up"></i></button>
-                                        <button class="btn btn-danger mr-2"><i class="fa fa-caret-down"></i></button>
+                                    @if(_context.HttpContext.Session.GetString("userId")!=answer.User.Id.ToString())
+                                    {
+                                        <button class="btn btn-primary mr-2" onclick="answerVote('@answer.Id','Up')" ><i class="fa fa-caret-up"> @upvotes</i></button>
+                                        <button class="btn btn-danger mr-2" onclick="answerVote('@answer.Id','Down')" ><i class="fa fa-caret-down"> @downvotes</i></button>
+                                    }else{
+                                        <button class="btn btn-primary mr-2" disabled ><i class="fa fa-caret-up"> @upvotes</i></button>
+                                        <button class="btn btn-danger mr-2" disabled ><i class="fa fa-caret-down"> @downvotes</i></button>
+                                    }
+                                        
                                 </div>
-                                    @if (_context.HttpContext.Session.GetString("userId")==answer.User.Id.ToString())
+                                    @if (_signInManager.IsSignedIn(User) && _context.HttpContext.Session.GetString("userId") == Model.User.Id.ToString() &&  _context.HttpContext.Session.GetString("userId")!=answer.User.Id.ToString() && !answer.AcceptedAnswer)
                                     {
                                         <div>
                                             @Html.AntiForgeryToken()
-                                            <button value="@answer.Id" type="button" class="btn btn-secondary">Edit</button>
+                                            <button type="button" class="btn btn-success" onclick="confirmAnswer('@answer.Id','@Model.Id')">Accept Answer</button>
+                                        </div>
+                                    }
+                                    @if (_signInManager.IsSignedIn(User) && _context.HttpContext.Session.GetString("userId")==answer.User.Id.ToString())
+                                    {
+                                        <div>
+                                            @Html.AntiForgeryToken()
+                                            <a asp-controller="Answer" asp-action="EditAnswer" asp-route-postId="@Model.Id" asp-route-answerId="@answer.Id" class="btn btn-secondary">Edit</a>
                                             <button type="button" class="btn btn-danger" onclick="confirmDelete('@answer.Id','@Model.Id')">Delete</button>
                                         </div>
                                     }
@@ -82,30 +131,82 @@
                     </div>
                     }
                 </div>
-
-                <h4>Add Answer</h4>
-                <form asp-controller="Answer" asp-action="AddAnswer" method="post">
-                    <div class="form-group">
-                        <input type="hidden" value="@Model.Id" name="postId" />
-                        <label for="answerBody">Your Answer:</label>
-                        <textarea name="answer" class="form-control" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit Answer</button>
-                </form>
             </div>
         </div>
     </div>
-</div><!-- /.container-fluid -->
+</div>
 
 @section Scripts {
 
     <script>
 
+        function postVote(postId, voteType) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("PostUpdateVote", "Vote")",
+                data: { postId: postId, voteType: voteType },
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function () {
+                location.reload(true);
+            },
+            error: function (error) {
+                if (error.status === 401) {
+                window.location.href = "@Url.Action("Login", "Account")";
+            }
+            }
+           });
+       };
+
+        function answerVote(answerId, voteType) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AnswerUpdateVote", "Vote")",
+                data: { answerId: answerId, voteType: voteType },
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function () {
+                location.reload(true);
+            },
+            error: function (error) {
+                if (error.status === 401) {
+                window.location.href = "@Url.Action("Login", "Account")";
+            }
+            }
+           });
+       };
+
+        function confirmAnswer(answerId,postId) {
+            if (confirm("Are you sure you want to accept this answer?")) {
+                acceptAnswer(answerId, postId);
+            }
+        };
+
+        function acceptAnswer(answerId, postId) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AcceptAnswer", "User")",
+                data: { answerId: answerId, postId: postId },
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function () {
+                location.reload(true);
+            },
+            error: function (error) {
+                // Handle errors, e.g., display an error message
+                console.log(error);
+            }
+           });
+       };
+
         function confirmDelete(answerId,postId) {
             if (confirm("Are you sure you want to delete this answer?")) {
                 deleteAnswer(answerId, postId);
             }
-        }
+        };
 
         function deleteAnswer(answerId, postId) {
             $.ajax({
@@ -122,8 +223,9 @@
                 // Handle errors, e.g., display an error message
                 console.log(error);
             }
-        });
-    }
+           });
+       };
+    
 </script>
 
 }

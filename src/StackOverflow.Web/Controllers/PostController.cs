@@ -12,12 +12,13 @@ namespace StackOverflow.Web.Controllers
     {
         private ILifetimeScope _scope;
         private UserManager<ApplicationUser> _userManager;
-        private IUnitOfWork _unitOfWork;
-        public PostController(ILifetimeScope scope, UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork)
+        private IHttpContextAccessor _contextAccessor;
+        public PostController(ILifetimeScope scope, UserManager<ApplicationUser> userManager,
+            IHttpContextAccessor contextAccessor)
         {
             _scope = scope;
             _userManager = userManager;
-            _unitOfWork = unitOfWork;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<IActionResult> Index(int pageIndex=1)
@@ -49,9 +50,16 @@ namespace StackOverflow.Web.Controllers
         {
             model.ResolveDependency(_scope);
             model.CreatedByUserId = new Guid(_userManager.GetUserId(User));
-            await model.Add();
 
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                await model.Add();
+
+                return RedirectToAction("Index");
+            }
+
+            await model.loadTags();
+            return View(model);
         }
 
         public async Task<IActionResult> Details(Guid id)
@@ -64,6 +72,11 @@ namespace StackOverflow.Web.Controllers
                 return NotFound();
             }
 
+            if(User.Identity.IsAuthenticated)
+            {
+                _contextAccessor.HttpContext.Session.SetString("userId", _userManager.GetUserId(User).ToString());
+            }
+            
             return View(post);
         }
 

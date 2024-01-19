@@ -10,8 +10,12 @@ namespace StackOverflow.Web.Models.PostModel
         [Required]
         public Guid PostId { get; set; }
         [Required]
+        [MaxLength(100)]
+        [MinLength(10)]
         public string PostTitle { get; set; }
         [Required]
+        [MinLength(10)]
+        [MaxLength(4000)]
         public string PostContent { get; set; }
 
         private IPostService _postService;

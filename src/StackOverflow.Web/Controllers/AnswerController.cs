@@ -17,19 +17,56 @@ namespace StackOverflow.Web.Controllers
             _scope = scope;
         }
 
-        [HttpPost]
         [Authorize]
-        public async Task<IActionResult> AddAnswer(Guid postId,string answer)
+        public IActionResult AddAnswer(Guid postId)
         {
             var model = _scope.Resolve<AddAnswerModel>();
             model.ResolveDependency(_scope);
 
-            model.Content = answer;
-            model.userId = new Guid(_userManager.GetUserId(User));
-            model.postId = postId;
+            model.postId =postId;
 
-            await model.Add();
-            return RedirectToAction("Details", "Post", new { id = postId });
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddAnswer(AddAnswerModel model)
+        {
+            model.ResolveDependency(_scope);
+
+            model.userId = new Guid(_userManager.GetUserId(User));
+            if(ModelState.IsValid)
+            {
+                await model.Add();
+                return RedirectToAction("Details", "Post", new { id = model.postId });
+            }
+
+            return View(model);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> EditAnswer(Guid postId,Guid answerId)
+        {
+            var model = _scope.Resolve<UpdateAnswerModel>();
+            model.ResolveDependency(_scope);
+            model.PostId = postId;
+            await model.loadAnswer(answerId);
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAnswer(UpdateAnswerModel model)
+        {
+            model.ResolveDependency(_scope);
+            if(ModelState.IsValid)
+            {
+                await model.UpdateAnswer();
+                return RedirectToAction("Details", "Post", new { id = model.PostId });
+            }
+
+            return View(model);
         }
     }
 }

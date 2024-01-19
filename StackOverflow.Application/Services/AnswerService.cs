@@ -1,10 +1,5 @@
 ﻿using StackOverflow.Infrastructure.Entity;
 using StackOverflow.Infrastructure.UnitOfWorks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StackOverflow.Application.Services
 {
@@ -35,6 +30,18 @@ namespace StackOverflow.Application.Services
                 throw new InvalidOperationException("answer not found");
             }
             await _unitOfWork.Answer.DeleteAsync(answerEntity);
+            await _unitOfWork.Commit();
+        }
+
+        public async Task<Answer?> GetAnswerById(Guid id)
+        {
+            return await _unitOfWork.Answer.GetSingleAsync(id);
+        }
+
+        public async Task Update(Answer entity)
+        {
+            await _unitOfWork.BeginTransaction();
+            await _unitOfWork.Answer.UpdateAsync(entity);
             await _unitOfWork.Commit();
         }
     }

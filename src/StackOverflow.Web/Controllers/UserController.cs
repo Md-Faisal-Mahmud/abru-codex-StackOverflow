@@ -62,9 +62,13 @@ namespace StackOverflow.Web.Controllers
         public async Task<IActionResult> Edit(UpdatePostModel model)
         {
             model.ResolveDependency(_scope);
-            await model.Update();
+            if (ModelState.IsValid)
+            {
+                await model.Update();
 
-            return RedirectToAction("MyPost");
+                return RedirectToAction("MyPost");
+            }
+            return View(model);
         }
 
         [Authorize]
@@ -75,6 +79,16 @@ namespace StackOverflow.Web.Controllers
             await model.DeleteTag(model.AnswerId);
 
             return RedirectToAction("Details", "Post", new { id = model.PostId });
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AcceptAnswer(Guid answerId,Guid postId)
+        {
+            var model = _scope.Resolve<UpdateAnswerModel>();
+            await model.AcceptAnswer(answerId, postId);
+            return Ok();
         }
     }
 }

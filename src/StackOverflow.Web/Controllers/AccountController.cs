@@ -121,6 +121,7 @@ namespace StackOverflow.Web.Controllers
         public async Task<IActionResult> Logout(string? returnUrl = null)
         {
             await _signInManager.SignOutAsync();
+            _contextAccessor.HttpContext.Session.Clear();
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);

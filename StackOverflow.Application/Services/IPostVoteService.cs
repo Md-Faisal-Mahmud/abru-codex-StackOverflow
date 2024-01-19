@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace StackOverflow.Application.Services
 {
-    public interface IAnswerService
+    public interface IPostVoteService
     {
-        Task AddAnswer(Answer entity);
-        Task DeleteTag(Guid id);
-        Task<Answer?> GetAnswerById(Guid id);
-        Task Update(Answer entity);
+        Task AddVote(PostVote entity);
+        Task UpdateVote(PostVote entity);
+        Task<PostVote?> GetByPostAndUser(Guid postId, Guid userId);
     }
 }
