@@ -15,8 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\StackOverflow.Application\StackOverflow.Application.csproj" />
-    <ProjectReference Include="..\..\StackOverflow.Infrastructure\StackOverflow.Infrastructure.csproj" />
     <ProjectReference Include="..\StackOverflow.Application\StackOverflow.Application.csproj" />
     <ProjectReference Include="..\StackOverflow.Infrastructure\StackOverflow.Infrastructure.csproj" />
   </ItemGroup>
