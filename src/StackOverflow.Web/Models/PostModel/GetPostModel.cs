@@ -1,24 +1,23 @@
 ﻿using Autofac;
-using Microsoft.Extensions.Hosting;
 using StackOverflow.Application.Services;
 using StackOverflow.Infrastructure.Entity;
 
 namespace StackOverflow.Web.Models.PostModel
 {
-    public class PostListModel
+    public class GetPostModel
     {
         public IList<Post> Posts { get; set; } = new List<Post>();
         public int TotalPages { get; set; }
-        public int CurrentPage { get;set; } =1;
+        public int CurrentPage { get; set; } = 1;
 
         private IPostService _postService;
 
-        public PostListModel()
+        public GetPostModel()
         {
 
         }
 
-        public PostListModel(IPostService postService)
+        public GetPostModel(IPostService postService)
         {
             _postService = postService;
         }
@@ -41,7 +40,9 @@ namespace StackOverflow.Web.Models.PostModel
                 Description = post.Description.Length > 200 ? post.Description.Substring(0, 200) : post.Description,
                 CreatedDate = post.CreatedDate,
                 Tag = post.Tag,
-                User = post.User
+                User = post.User,
+                Answers = post.Answers,
+                Votes = post.Votes
             }).ToList();
         }
 

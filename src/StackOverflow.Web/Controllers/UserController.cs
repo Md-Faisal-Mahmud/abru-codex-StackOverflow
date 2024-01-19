@@ -21,7 +21,7 @@ namespace StackOverflow.Web.Controllers
         [Authorize]
         public async Task<IActionResult> MyPost()
         {
-            var model = _scope.Resolve<PostListModel>();
+            var model = _scope.Resolve<GetPostModel>();
             model.ResolveDependency(_scope);
 
             var currentUserId = _userManager.GetUserId(User);

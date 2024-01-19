@@ -79,7 +79,6 @@ namespace StackOverflow.Web.Controllers
             var model = _scope.Resolve<LoginModel>();
             returnUrl ??= Url.Content("~/");
 
-            // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             model.ReturnUrl = returnUrl;

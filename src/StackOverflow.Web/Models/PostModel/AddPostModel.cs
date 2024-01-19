@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Ganss.Xss;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using StackOverflow.Application.Services;
 using StackOverflow.Infrastructure.Entity;
@@ -49,6 +50,7 @@ namespace StackOverflow.Web.Models.PostModel
         internal async Task loadTags()
         {
             var data = await _tagService.GetAllTag();
+
             Tags = data.Select(x => new SelectListItem
             {
                 Value = x.Id.ToString(),
@@ -65,17 +67,20 @@ namespace StackOverflow.Web.Models.PostModel
                 throw new InvalidOperationException("user not found");
             }
 
-            var postTags = new List<Tag>();
             var tag = await _tagService.GetById(TagsIds);
-            if (tag != null)
+
+            if(tag==null)
             {
-                postTags.Add(tag);
+                throw new InvalidOperationException($"Tag with ID {TagsIds} don't exist.");
             }
+
+            var sanitizer = new HtmlSanitizer();
+            var sanitizedHtml = sanitizer.Sanitize(Description);
 
             var post = new Post
             {
                 Title = Title,
-                Description = Description,
+                Description = sanitizedHtml,
                 User = user,
                 Tag = tag
             };
