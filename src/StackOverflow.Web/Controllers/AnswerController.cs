@@ -54,7 +54,6 @@ namespace StackOverflow.Web.Controllers
         }
 
         [Authorize]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditAnswer(Guid postId, Guid answerId)
         {
             var model = _scope.Resolve<UpdateAnswerModel>();
