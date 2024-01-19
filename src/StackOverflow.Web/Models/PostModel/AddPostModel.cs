@@ -1,9 +1,7 @@
 ﻿using Autofac;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using StackOverflow.Application.Services;
 using StackOverflow.Infrastructure.Entity;
-using StackOverflow.Infrastructure.Features.Membership;
 using System.ComponentModel.DataAnnotations;
 
 namespace StackOverflow.Web.Models.PostModel
@@ -22,7 +20,7 @@ namespace StackOverflow.Web.Models.PostModel
         public Guid CreatedByUserId { get; set; }
         public List<SelectListItem>? Tags { get; set; }
         [Required]
-        public Guid TagsIds { get;  set; } 
+        public Guid TagsIds { get; set; }
 
         private IPostService _postService;
         private ITagService _tagService;
@@ -34,7 +32,7 @@ namespace StackOverflow.Web.Models.PostModel
         }
 
         public AddPostModel(IPostService postService, ITagService tagService,
-            IUserService userService )
+            IUserService userService)
         {
             _postService = postService;
             _tagService = tagService;
@@ -69,7 +67,7 @@ namespace StackOverflow.Web.Models.PostModel
 
             var postTags = new List<Tag>();
             var tag = await _tagService.GetById(TagsIds);
-            if(tag != null)
+            if (tag != null)
             {
                 postTags.Add(tag);
             }

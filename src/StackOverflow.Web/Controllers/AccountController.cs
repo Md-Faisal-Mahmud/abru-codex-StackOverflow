@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using StackOverflow.Infrastructure.Features.Membership;
+using StackOverflow.Infrastructure.Membership.Entities;
 using StackOverflow.Web.Models;
-using System.Security.Claims;
 
 namespace StackOverflow.Web.Controllers
 {
