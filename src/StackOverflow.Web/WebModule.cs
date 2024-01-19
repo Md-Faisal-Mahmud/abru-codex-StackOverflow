@@ -3,6 +3,7 @@ using StackOverflow.Web.Models;
 using StackOverflow.Web.Models.AnswerModel;
 using StackOverflow.Web.Models.PostModel;
 using StackOverflow.Web.Models.TagModel;
+using StackOverflow.Web.Models.VoteModel;
 
 namespace StackOverflow.Web
 {
@@ -26,10 +27,10 @@ namespace StackOverflow.Web
             builder.RegisterType<UpdatePostModel>().AsSelf();
             builder.RegisterType<DeleteAnswerModel>().AsSelf();
             builder.RegisterType<UpdateAnswerModel>().AsSelf();
-            builder.RegisterType<AnswerVoteModel>().AsSelf();
-            builder.RegisterType<PostVoteModel>().AsSelf();
 
             builder.RegisterType<AddAnswerModel>().AsSelf();
+
+            builder.RegisterType<VoteModel>().AsSelf();
 
             base.Load(builder);
         }
