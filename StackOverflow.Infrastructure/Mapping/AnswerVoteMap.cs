@@ -1,5 +1,5 @@
-﻿using NHibernate;
-using NHibernate.Mapping.ByCode;
+﻿using NHibernate.Mapping.ByCode;
+using NHibernate;
 using NHibernate.Mapping.ByCode.Conformist;
 using StackOverflow.Infrastructure.Entity;
 using System;
@@ -7,14 +7,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NHibernate.Type;
+using StackOverflow.Infrastructure.Enum;
 
 namespace StackOverflow.Infrastructure.Mapping
 {
-    public class AnswerMap : ClassMapping<Answer>
+    public class AnswerVoteMap : ClassMapping<AnswerVote>
     {
-        public AnswerMap()
+        public AnswerVoteMap() 
         {
-            Table("Answers");
+            Table("AnswerVote");
 
             Id(x => x.Id, x =>
             {
@@ -24,16 +26,12 @@ namespace StackOverflow.Infrastructure.Mapping
                 x.UnsavedValue(Guid.Empty);
             });
 
-            Property(x => x.AnswerText, map =>
+            Property(x => x.VoteType, x =>
             {
-                map.NotNullable(true);
-                map.Length(4000);
-                map.Type(NHibernateUtil.String);
+                x.Type<EnumType<VoteType>>();
+                x.NotNullable(true);
+                x.Column("VoteType");
             });
-
-            Property(x => x.AcceptedAnswer);
-
-            Property(x => x.CreatedDate);
 
             ManyToOne(x => x.User, map =>
             {
@@ -42,18 +40,12 @@ namespace StackOverflow.Infrastructure.Mapping
                 map.Cascade(Cascade.None);
             });
 
-            ManyToOne(x => x.Post, map =>
+            ManyToOne(x => x.Answer, map =>
             {
                 map.NotNullable(true);
-                map.Column("PostId");
+                map.Column("AnswerId");
                 map.Cascade(Cascade.None);
             });
-
-            Bag(x => x.Votes, map =>
-            {
-                map.Key(k => k.Column("AnswerId"));
-                map.Cascade(Cascade.All | Cascade.DeleteOrphans);
-            }, relation => relation.OneToMany());
         }
     }
 }

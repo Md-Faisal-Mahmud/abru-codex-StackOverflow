@@ -12,6 +12,7 @@ namespace StackOverflow.Infrastructure.Entity
         public virtual string AnswerText { get; set; }
         public virtual bool AcceptedAnswer { get; set; } = false;
         public virtual DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        public virtual IList<AnswerVote> Votes { get; set; } = new List<AnswerVote>();
         public virtual Post Post { get; set; }
         public virtual User User { get; set; }
     }

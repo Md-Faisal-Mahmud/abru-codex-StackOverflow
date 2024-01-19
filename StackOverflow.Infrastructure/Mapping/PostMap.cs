@@ -53,6 +53,12 @@ namespace StackOverflow.Infrastructure.Mapping
                 map.Key(k => k.Column("PostId"));
                 map.Cascade(Cascade.All | Cascade.DeleteOrphans);
             }, relation => relation.OneToMany());
+
+            Bag(x => x.Votes, map =>
+            {
+                map.Key(k => k.Column("PostId"));
+                map.Cascade(Cascade.All | Cascade.DeleteOrphans);
+            }, relation => relation.OneToMany());
         }
 
     }
