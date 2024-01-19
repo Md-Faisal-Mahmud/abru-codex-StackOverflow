@@ -25,10 +25,7 @@ namespace StackOverflow.Application
             builder.RegisterType<UserService>().As<IUserService>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<AnswerVoteService>().As<IAnswerVoteService>()
-                .InstancePerLifetimeScope();
-
-            builder.RegisterType<PostVoteService>().As<IPostVoteService>()
+            builder.RegisterType<VoteService>().As<IVoteService>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<SeedService>().As<ISeedService>()

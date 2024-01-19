@@ -1,12 +1,12 @@
 ﻿using Autofac;
 using StackOverflow.Application.Services;
 using StackOverflow.Infrastructure.Entity;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace StackOverflow.Web.Models.TagModel
 {
-    public class AddTagModel
+    public class TagModel
     {
         [DisplayName("Tag Name")]
         [Required]
@@ -20,14 +20,16 @@ namespace StackOverflow.Web.Models.TagModel
         [MaxLength(150)]
         public string TagDescription { get; set; }
 
+        public IList<Tag>? Tags = new List<Tag>();
+
         private ITagService _tagService;
 
-        public AddTagModel()
+        public TagModel()
         {
 
         }
 
-        public AddTagModel(ITagService tagService)
+        public TagModel(ITagService tagService)
         {
             _tagService = tagService;
         }
@@ -37,6 +39,10 @@ namespace StackOverflow.Web.Models.TagModel
             _tagService = scope.Resolve<ITagService>();
         }
 
+        internal async Task Load()
+        {
+            Tags = await _tagService.GetAllTag();
+        }
         internal async Task Add()
         {
             var tag = new Tag
@@ -46,6 +52,10 @@ namespace StackOverflow.Web.Models.TagModel
             };
 
             await _tagService.AddTag(tag);
+        }
+        internal async Task Delete(Guid id)
+        {
+            await _tagService.DeleteTag(id);
         }
     }
 }

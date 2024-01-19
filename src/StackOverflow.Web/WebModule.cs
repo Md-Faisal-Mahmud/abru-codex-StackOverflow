@@ -3,6 +3,7 @@ using StackOverflow.Web.Models;
 using StackOverflow.Web.Models.AnswerModel;
 using StackOverflow.Web.Models.PostModel;
 using StackOverflow.Web.Models.TagModel;
+using StackOverflow.Web.Models.VoteModel;
 
 namespace StackOverflow.Web
 {
@@ -17,19 +18,18 @@ namespace StackOverflow.Web
             builder.RegisterType<LoginModel>().AsSelf()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<TagModel>().AsSelf();
+
             builder.RegisterType<AddPostModel>().AsSelf();
-            builder.RegisterType<PostListModel>().AsSelf();
-            builder.RegisterType<DeletePostModel>().AsSelf();
-            builder.RegisterType<AddTagModel>().AsSelf();
-            builder.RegisterType<GetTagModel>().AsSelf();
-            builder.RegisterType<DeleteTagModel>().AsSelf();
+            builder.RegisterType<PostModel>().AsSelf();
+
             builder.RegisterType<UpdatePostModel>().AsSelf();
             builder.RegisterType<DeleteAnswerModel>().AsSelf();
             builder.RegisterType<UpdateAnswerModel>().AsSelf();
-            builder.RegisterType<AnswerVoteModel>().AsSelf();
-            builder.RegisterType<PostVoteModel>().AsSelf();
 
             builder.RegisterType<AddAnswerModel>().AsSelf();
+
+            builder.RegisterType<VoteModel>().AsSelf();
 
             base.Load(builder);
         }

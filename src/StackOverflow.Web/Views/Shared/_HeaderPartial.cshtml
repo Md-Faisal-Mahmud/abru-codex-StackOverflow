@@ -4,8 +4,8 @@
 
 <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
     <div class="container">
-        <a href="" class="navbar-brand">
-            <img src="~/stackoverflow.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <a asp-action="Index" asp-controller="Home" class="navbar-brand">
+            <img src="~/stackoverflow.png" alt="Stack Overflow Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
             <span class="brand-text font-weight-light">Stack Overflow</span>
         </a>
 
@@ -17,7 +17,7 @@
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a href="" class="nav-link">Home</a>
+                    <a asp-action="Index" asp-controller="Home" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item">
                     <a asp-controller="Post" asp-action="Index" class="nav-link">Question</a>
@@ -31,9 +31,6 @@
                         <a asp-controller="User" asp-action="MyPost" class="nav-link">My Question</a>
                     </li>
                 }
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Contact</a>
-                </li>
             </ul>
         </div>
 

@@ -1,6 +1,6 @@
 ﻿@inject SignInManager<ApplicationUser> SignInManager;
 @using Markdig
-@model PostListModel
+@model PostModel
 
 <div class="content-header">
     <div class="container">
@@ -17,21 +17,22 @@
                 <div class="col">
                     @foreach (var item in Model.Posts)
                     {
+
+    var postUpvotes = item.Votes.Count(x => x.VoteType == StackOverflow.Infrastructure.Enum.VoteType.Up);
+    var postDownvotes = item.Votes.Count(x => x.VoteType == StackOverflow.Infrastructure.Enum.VoteType.Down);
+
                         <div class="card">
                             <div class="card-body">
                                 <div class="row mb-2">
                                     <div class="col">
                                         <div class="row justify-content-between">
-                                            <div >
-                                                <h5 class="card-title">By: @item.User.DisplayName</h5>
+                                            <div>
+                                                <h5 class="card-title">Question by <strong> @item.User.DisplayName</strong> on @item.CreatedDate.ToLongDateString()</h5>
                                             </div>
                                             <div >
-                                            <span class="badge badge-success">@item.Tag.TagName</span>
-                                                
+                                                <h5><span class="badge badge-success">@item.Tag.TagName</span></h5>
                                             </div>
-                                            <div >
-                                                <h5 class="card-title">@item.CreatedDate.ToLocalTime()</h5>
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                     <div class="col-12 mt-2">
@@ -48,7 +49,16 @@
                                          </div>
                                     </div>
                                 </div>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">View Answers</a>
+                            <div class="row justify-content-between">
+                                    <div>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">View Answers  <span class="badge badge-light">@item.Answers.Count()</span></a>
+                                    </div>
+                                    <div>
+                                    <button class="btn btn-primary mr-2" disabled><i class="fa fa-caret-up"> @postUpvotes</i></button>
+                                    <button class="btn btn-danger mr-2" disabled><i class="fa fa-caret-down"> @postDownvotes</i></button>
+                                    </div>
+                                </div>
+                            
                            </div>
                         </div>
                     }
