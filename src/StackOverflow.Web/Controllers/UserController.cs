@@ -62,9 +62,13 @@ namespace StackOverflow.Web.Controllers
         public async Task<IActionResult> Edit(UpdatePostModel model)
         {
             model.ResolveDependency(_scope);
-            await model.Update();
+            if (ModelState.IsValid)
+            {
+                await model.Update();
 
-            return RedirectToAction("MyPost");
+                return RedirectToAction("MyPost");
+            }
+            return View(model);
         }
 
         [Authorize]

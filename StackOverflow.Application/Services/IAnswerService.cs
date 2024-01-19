@@ -11,5 +11,7 @@ namespace StackOverflow.Application.Services
     {
         Task AddAnswer(Answer entity);
         Task DeleteTag(Guid id);
+        Task<Answer?> GetAnswerById(Guid id);
+        Task Update(Answer entity);
     }
 }

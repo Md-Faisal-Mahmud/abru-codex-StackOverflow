@@ -4,15 +4,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using StackOverflow.Application.Services;
 using StackOverflow.Infrastructure.Entity;
 using StackOverflow.Infrastructure.Features.Membership;
+using System.ComponentModel.DataAnnotations;
 
 namespace StackOverflow.Web.Models.PostModel
 {
     public class AddPostModel
     {
+        [Required]
+        [MaxLength(100)]
+        [MinLength(10)]
         public string Title { get; set; }
+        [Required]
+        [MinLength(10)]
+        [MaxLength(4000)]
         public string Description { get; set; }
+        [Required]
         public Guid CreatedByUserId { get; set; }
-        public List<SelectListItem> Tags { get; set; }
+        public List<SelectListItem>? Tags { get; set; }
+        [Required]
         public Guid TagsIds { get;  set; } 
 
         private IPostService _postService;

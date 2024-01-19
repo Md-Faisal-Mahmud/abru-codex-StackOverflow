@@ -22,23 +22,28 @@ namespace StackOverflow.Infrastructure.Mapping
             Property(x => x.Title, map =>
             {
                 map.Length(100);
+                map.NotNullable(true);
                 map.Type(NHibernateUtil.String);
             });
             Property(x => x.Description, map =>
             {
                 map.Length(4000);
+                map.NotNullable(true);
                 map.Type(NHibernateUtil.String);
             });
+
             Property(x => x.CreatedDate);
 
             ManyToOne(x => x.User, map =>
             {
+                map.NotNullable(true);
                 map.Column("UserId");
                 map.Cascade(Cascade.None);
             });
 
             ManyToOne(x => x.Tag, map =>
             {
+                map.NotNullable(true);
                 map.Column("TagId");
                 map.Cascade(Cascade.None);
             });

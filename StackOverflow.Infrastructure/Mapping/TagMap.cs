@@ -24,8 +24,18 @@ namespace StackOverflow.Infrastructure.Mapping
                 x.UnsavedValue(Guid.Empty);
             });
 
-            Property(x => x.TagName);
-            Property(x => x.TagDescription);
+            Property(x => x.TagName, map =>
+            {
+                map.NotNullable(true);
+                map.Length(10);
+                map.Type(NHibernateUtil.String);
+            });
+            Property(x => x.TagDescription, map =>
+            {
+                map.NotNullable(true);
+                map.Length(150);
+                map.Type(NHibernateUtil.String);
+            });
 
             Bag(x => x.Posts, map =>
             {

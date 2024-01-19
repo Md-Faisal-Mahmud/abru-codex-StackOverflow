@@ -1,5 +1,6 @@
 ﻿@model Post
 @inject IHttpContextAccessor _context;
+@inject SignInManager<ApplicationUser> _signInManager
 <div class="content-header">
     <div class="container">
         <div class="row justify-content-between mb-2">
@@ -36,7 +37,7 @@
                                 <div class="col-12">
                                     @if (Model.Description != null)
                                     {
-                                        <p class="card-text"> @Html.Raw(Markdig.Markdown.ToHtml(Model.Description))</p>
+                                        <p class="card-text">@Html.Raw(Markdig.Markdown.ToHtml(Model.Description))</p>
                                     }
                                 </div>
                             </div>
@@ -50,7 +51,7 @@
             <div class="col">
                 <div class="row justify-content-between">
                     <h4>@Model.Answers.Count() Answer</h4>
-                    <button class="btn btn-primary">Add Answer</button>
+                    <a asp-controller="Answer" asp-action="AddAnswer" asp-route-postId="@Model.Id" class="btn btn-primary">Add Answer</a>
                 </div>
                 
                 <div class="mb-3">
@@ -61,7 +62,7 @@
                                 Answered by <strong> @answer.User.DisplayName</strong> on @Model.CreatedDate.ToLongDateString()
                         </div>
                         <div class="card-body">
-                                @answer.AnswerText
+                                @Html.Raw(Markdig.Markdown.ToHtml(@answer.AnswerText))
                         </div>
                         <div class="card-footer text-muted">
                                 <div class="row justify-content-between">
@@ -69,11 +70,11 @@
                                         <button class="btn btn-primary mr-2"><i class="fa fa-caret-up"></i></button>
                                         <button class="btn btn-danger mr-2"><i class="fa fa-caret-down"></i></button>
                                 </div>
-                                    @if (_context.HttpContext.Session.GetString("userId")==answer.User.Id.ToString())
+                                    @if (_signInManager.IsSignedIn(User) && _context.HttpContext.Session.GetString("userId")==answer.User.Id.ToString())
                                     {
                                         <div>
                                             @Html.AntiForgeryToken()
-                                            <button value="@answer.Id" type="button" class="btn btn-secondary">Edit</button>
+                                            <a asp-controller="Answer" asp-action="EditAnswer" asp-route-postId="@Model.Id" asp-route-answerId="@answer.Id" class="btn btn-secondary">Edit</a>
                                             <button type="button" class="btn btn-danger" onclick="confirmDelete('@answer.Id','@Model.Id')">Delete</button>
                                         </div>
                                     }
@@ -83,7 +84,7 @@
                     }
                 </div>
 
-                <h4>Add Answer</h4>
+                @* <h4>Add Answer</h4>
                 <form asp-controller="Answer" asp-action="AddAnswer" method="post">
                     <div class="form-group">
                         <input type="hidden" value="@Model.Id" name="postId" />
@@ -91,7 +92,7 @@
                         <textarea name="answer" class="form-control" required></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit Answer</button>
-                </form>
+                </form> *@
             </div>
         </div>
     </div>

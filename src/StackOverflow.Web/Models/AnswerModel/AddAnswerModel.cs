@@ -1,11 +1,15 @@
 ﻿using Autofac;
 using StackOverflow.Application.Services;
 using StackOverflow.Infrastructure.Entity;
+using System.ComponentModel.DataAnnotations;
 
 namespace StackOverflow.Web.Models.AnswerModel
 {
     public class AddAnswerModel
     {
+        [Required]
+        [MinLength(5)]
+        [MaxLength(4000)]
         public string Content { get; set; }
         public Guid postId { get; set; }
         public  Guid userId { get; set; }
@@ -19,6 +23,7 @@ namespace StackOverflow.Web.Models.AnswerModel
             
         }
 
+        
         public AddAnswerModel(IAnswerService answerService,IPostService postService,
             IUserService userService)
         {
@@ -39,6 +44,11 @@ namespace StackOverflow.Web.Models.AnswerModel
         {
             var user = await _userService.GetByIdAsync(userId);
             var post = await _postService.GetById(postId);
+
+            if(user == null || post == null) 
+            {
+                throw new InvalidOperationException();
+            }
 
             var answer = new Answer
             {

@@ -24,17 +24,27 @@ namespace StackOverflow.Infrastructure.Mapping
                 x.UnsavedValue(Guid.Empty);
             });
 
-            Property(x => x.AnswerText);
+            Property(x => x.AnswerText, map =>
+            {
+                map.NotNullable(true);
+                map.Length(4000);
+                map.Type(NHibernateUtil.String);
+            });
+
+            Property(x => x.AcceptedAnswer);
+
             Property(x => x.CreatedDate);
 
             ManyToOne(x => x.User, map =>
             {
+                map.NotNullable(true);
                 map.Column("UserId");
                 map.Cascade(Cascade.None);
             });
 
             ManyToOne(x => x.Post, map =>
             {
+                map.NotNullable(true);
                 map.Column("PostId");
                 map.Cascade(Cascade.None);
             });
