@@ -11,7 +11,10 @@
                 <a asp-controller="Post" asp-action="Create" class="btn btn-primary">Ask Question</a>
             </div><!-- /.col -->
         </div><!-- /.row -->
-
+@{
+    var postUpvotes = Model.Votes.Count(x => x.VoteType == StackOverflow.Infrastructure.Enum.VoteType.Up);
+    var postDownvotes = Model.Votes.Count(x => x.VoteType == StackOverflow.Infrastructure.Enum.VoteType.Down);
+}
         <div class="row">
             <div class="col">
                 <div class="card my-3">
@@ -26,23 +29,37 @@
                             </div>
                             
                         </div>
-                    <div class="card-body">
-                        <div class="row mb-2">
-                            <div class="col-12 mt-2">
-                                <div class="col-12">
-                                    <h5 class="card-title text-bold">@Model.Title</h5>
+                        <div class="card-body">
+                            <div class="row mb-2">
+                                <div class="col-12 mt-2">
+                                    <div class="col-12">
+                                        <h5 class="card-title text-bold">@Model.Title</h5>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-12">
                                 <div class="col-12">
-                                    @if (Model.Description != null)
-                                    {
-                                        <p class="card-text">@Html.Raw(Markdig.Markdown.ToHtml(Model.Description))</p>
-                                    }
+                                    <div class="col-12">
+                                        @if (Model.Description != null)
+                                        {
+                                            <p class="card-text">@Html.Raw(Markdig.Markdown.ToHtml(Model.Description))</p>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="card-footer text-muted">
+                                <div class="row justify-content-between">
+                                    <div>
+                                        @if(_context.HttpContext.Session.GetString("userId")!=Model.User.Id.ToString())
+                                        {
+                                            <button class="btn btn-primary mr-2" onclick="postVote('@Model.Id','Up')" ><i class="fa fa-caret-up"> @postUpvotes</i></button>
+                                            <button class="btn btn-danger mr-2" onclick="postVote('@Model.Id','Down')" ><i class="fa fa-caret-down"> @postDownvotes</i></button>
+                                        }else{
+                                            <button class="btn btn-primary mr-2" disabled ><i class="fa fa-caret-up"> @postUpvotes</i></button>
+                                            <button class="btn btn-danger mr-2" disabled ><i class="fa fa-caret-down"> @postDownvotes</i></button>
+                                        }
+                                    </div>
+                                <div>
+                        </div>
                 </div>
             </div>       
         </div>
@@ -122,11 +139,25 @@
 @section Scripts {
 
     <script>
-        function CalculateVoteScore(votes) {
-        var upvotes = votes.filter(vote => vote.VoteType === 'Up').length;
-        var downvotes = votes.filter(vote => vote.VoteType === 'Down').length;
-        return upvotes - downvotes;
-    }
+
+        function postVote(postId, voteType) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("PostUpdateVote", "Vote")",
+                data: { postId: postId, voteType: voteType },
+            headers: {
+                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function () {
+                location.reload(true);
+            },
+            error: function (error) {
+                if (error.status === 401) {
+                window.location.href = "@Url.Action("Login", "Account")";
+            }
+            }
+           });
+       };
 
         function answerVote(answerId, voteType) {
             $.ajax({

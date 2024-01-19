@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StackOverflow.Web.Models.AnswerModel;
+using StackOverflow.Web.Models.PostModel;
 using System.Security.Claims;
 
 namespace StackOverflow.Web.Controllers
@@ -27,6 +28,25 @@ namespace StackOverflow.Web.Controllers
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 await model.UpdateVote(answerId, Guid.Parse(userId), voteType);
+
+                return Ok();
+            }
+
+            return BadRequest("Some thing went wrong");
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PostUpdateVote(Guid postId, string voteType)
+        {
+            var model = _scope.Resolve<PostVoteModel>();
+            model.ResolveDependency(_scope);
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await model.UpdateVote(postId, Guid.Parse(userId), voteType);
 
                 return Ok();
             }

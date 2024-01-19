@@ -20,6 +20,7 @@ namespace StackOverflow.Infrastructure.UnitOfWorks
         ITagRepository Tag { get; }
         IAnswerRepository Answer { get; }
         IAnswerVoteRepository AnswerVote { get; }
+        IPostVoteRepository PostVote { get; }
 
     }
 }

@@ -25,7 +25,10 @@ namespace StackOverflow.Application
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<AnswerVoteService>().As<IAnswerVoteService>()
-                .InstancePerLifetimeScope(); 
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<PostVoteService>().As<IPostVoteService>()
+                .InstancePerLifetimeScope();
         }
     }
 }
