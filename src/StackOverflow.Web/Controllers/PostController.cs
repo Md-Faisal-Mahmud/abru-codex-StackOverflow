@@ -1,9 +1,6 @@
 ﻿using Autofac;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using StackOverflow.Infrastructure.Membership.Entities;
 using StackOverflow.Web.Models.PostModel;
 using System.Security.Claims;
 
@@ -36,12 +33,21 @@ namespace StackOverflow.Web.Controllers
         [Authorize]
         public async Task<IActionResult> Create()
         {
-            var model = _scope.Resolve<AddPostModel>();
-            model.ResolveDependency(_scope);
+            try
+            {
+                var model = _scope.Resolve<AddPostModel>();
+                model.ResolveDependency(_scope);
 
-            await model.loadTags();
+                await model.loadTags();
 
-            return View(model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return BadRequest("500 Internal Server Error");
+            }
+
         }
 
         [HttpPost]
@@ -105,7 +111,7 @@ namespace StackOverflow.Web.Controllers
                 _logger.LogError(ex, ex.Message);
                 return RedirectToAction("Index");
             }
-            
+
         }
 
 
