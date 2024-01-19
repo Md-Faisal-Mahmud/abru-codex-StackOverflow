@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Ganss.Xss;
 using StackOverflow.Application.Services;
 using StackOverflow.Infrastructure.Entity;
 using System.ComponentModel.DataAnnotations;
@@ -48,12 +49,14 @@ namespace StackOverflow.Web.Models.PostModel
         internal async Task Update()
         {
             var post = await _postService.GetById(PostId);
-            if (post != null)
-            {
-                post.Title= this.PostTitle;
-                post.Description= this.PostContent;
 
+            if (post == null)
+            {
+                throw new InvalidOperationException($"Post with ID {PostId} don't exist.");
             }
+
+            post.Title = this.PostTitle;
+            post.Description = PostContent;
 
             await _postService.UpdatePost(post);
 

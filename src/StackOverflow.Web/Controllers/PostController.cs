@@ -21,7 +21,7 @@ namespace StackOverflow.Web.Controllers
 
         public async Task<IActionResult> Index(int pageIndex = 1)
         {
-            var model = _scope.Resolve<GetPostModel>();
+            var model = _scope.Resolve<PostModel>();
             model.ResolveDependency(_scope);
 
             model.CurrentPage = pageIndex;
@@ -89,7 +89,7 @@ namespace StackOverflow.Web.Controllers
         {
             try
             {
-                var model = _scope.Resolve<GetPostModel>();
+                var model = _scope.Resolve<PostModel>();
                 model.ResolveDependency(_scope);
                 var post = await model.GetPost(id);
                 if (post == null)

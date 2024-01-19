@@ -4,7 +4,7 @@ using StackOverflow.Infrastructure.Entity;
 
 namespace StackOverflow.Web.Models.PostModel
 {
-    public class GetPostModel
+    public class PostModel
     {
         public IList<Post> Posts { get; set; } = new List<Post>();
         public int TotalPages { get; set; }
@@ -12,12 +12,12 @@ namespace StackOverflow.Web.Models.PostModel
 
         private IPostService _postService;
 
-        public GetPostModel()
+        public PostModel()
         {
 
         }
 
-        public GetPostModel(IPostService postService)
+        public PostModel(IPostService postService)
         {
             _postService = postService;
         }
@@ -64,6 +64,11 @@ namespace StackOverflow.Web.Models.PostModel
                 Tag = post.Tag,
                 User = post.User
             }).ToList();
+        }
+
+        internal async Task DeletePost(Guid id)
+        {
+            await _postService.DeletePost(id);
         }
     }
 }

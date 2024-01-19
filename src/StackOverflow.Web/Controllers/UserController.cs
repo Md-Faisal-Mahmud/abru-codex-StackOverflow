@@ -5,30 +5,36 @@ using Microsoft.AspNetCore.Mvc;
 using StackOverflow.Infrastructure.Membership.Entities;
 using StackOverflow.Web.Models.AnswerModel;
 using StackOverflow.Web.Models.PostModel;
+using System.Security.Claims;
 
 namespace StackOverflow.Web.Controllers
 {
     public class UserController : Controller
     {
         private readonly ILifetimeScope _scope;
-        private readonly UserManager<ApplicationUser> _userManager;
-        public UserController(ILifetimeScope scope, UserManager<ApplicationUser> userManager)
+        private readonly ILogger<UserController> _logger;
+        public UserController(ILifetimeScope scope, ILogger<UserController> logger)
         {
             _scope = scope;
-            _userManager = userManager;
+            _logger = logger;
         }
 
         [Authorize]
         public async Task<IActionResult> MyPost()
         {
-            var model = _scope.Resolve<GetPostModel>();
+            var model = _scope.Resolve<PostModel>();
             model.ResolveDependency(_scope);
 
-            var currentUserId = _userManager.GetUserId(User);
+            if (User.Identity!.IsAuthenticated)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await model.GetUserPost(Guid.Parse(userId));
 
-            await model.GetUserPost(new Guid(currentUserId));
+                return View(model);
+            }
 
-            return View(model);
+            return Unauthorized();
+            
         }
 
         [Authorize]
@@ -36,7 +42,7 @@ namespace StackOverflow.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var model = _scope.Resolve<DeletePostModel>();
+            var model = _scope.Resolve<PostModel>();
             model.ResolveDependency(_scope);
 
             await model.DeletePost(id);
@@ -58,16 +64,27 @@ namespace StackOverflow.Web.Controllers
 
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(UpdatePostModel model)
         {
-            model.ResolveDependency(_scope);
-            if (ModelState.IsValid)
+            try
             {
-                await model.Update();
+                if (ModelState.IsValid)
+                {
+                    model.ResolveDependency(_scope);
+                    await model.Update();
 
-                return RedirectToAction("MyPost");
+                    return RedirectToAction("MyPost");
+                }
+                return View(model);
+            } 
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+
+                return BadRequest("500 Internal Server Error");
             }
-            return View(model);
+            
         }
 
         [Authorize]

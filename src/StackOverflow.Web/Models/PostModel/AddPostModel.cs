@@ -74,13 +74,11 @@ namespace StackOverflow.Web.Models.PostModel
                 throw new InvalidOperationException($"Tag with ID {TagsIds} don't exist.");
             }
 
-            var sanitizer = new HtmlSanitizer();
-            var sanitizedHtml = sanitizer.Sanitize(Description);
 
             var post = new Post
             {
                 Title = Title,
-                Description = sanitizedHtml,
+                Description = Description,
                 User = user,
                 Tag = tag
             };
