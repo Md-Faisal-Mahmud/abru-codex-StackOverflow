@@ -80,5 +80,15 @@ namespace StackOverflow.Web.Controllers
 
             return RedirectToAction("Details", "Post", new { id = model.PostId });
         }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AcceptAnswer(Guid answerId,Guid postId)
+        {
+            var model = _scope.Resolve<UpdateAnswerModel>();
+            await model.AcceptAnswer(answerId, postId);
+            return Ok();
+        }
     }
 }

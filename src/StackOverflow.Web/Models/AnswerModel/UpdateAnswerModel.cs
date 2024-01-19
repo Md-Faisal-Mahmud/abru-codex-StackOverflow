@@ -59,5 +59,16 @@ namespace StackOverflow.Web.Models.AnswerModel
             await _answerService.Update(answer);
         }
 
+        internal async Task AcceptAnswer(Guid answerId,Guid postId)
+        {
+            var answer = await _answerService.GetAnswerById(answerId);
+            if (answer == null)
+            {
+                throw new InvalidOperationException("answer not found");
+            }
+            answer.AcceptedAnswer = true;
+            await _answerService.Update(answer);
+        }
+
     }
 }
