@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using StackOverflow.Infrastructure.Features.Membership;
+using StackOverflow.Infrastructure.Membership.Entities;
 using StackOverflow.Web.Models.AnswerModel;
 
 namespace StackOverflow.Web.Controllers
@@ -23,7 +23,7 @@ namespace StackOverflow.Web.Controllers
             var model = _scope.Resolve<AddAnswerModel>();
             model.ResolveDependency(_scope);
 
-            model.postId =postId;
+            model.postId = postId;
 
             return View(model);
         }
@@ -35,7 +35,7 @@ namespace StackOverflow.Web.Controllers
             model.ResolveDependency(_scope);
 
             model.userId = new Guid(_userManager.GetUserId(User));
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 await model.Add();
                 return RedirectToAction("Details", "Post", new { id = model.postId });
@@ -45,7 +45,7 @@ namespace StackOverflow.Web.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> EditAnswer(Guid postId,Guid answerId)
+        public async Task<IActionResult> EditAnswer(Guid postId, Guid answerId)
         {
             var model = _scope.Resolve<UpdateAnswerModel>();
             model.ResolveDependency(_scope);
@@ -60,7 +60,7 @@ namespace StackOverflow.Web.Controllers
         public async Task<IActionResult> EditAnswer(UpdateAnswerModel model)
         {
             model.ResolveDependency(_scope);
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 await model.UpdateAnswer();
                 return RedirectToAction("Details", "Post", new { id = model.PostId });

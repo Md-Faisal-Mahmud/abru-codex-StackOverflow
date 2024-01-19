@@ -1,9 +1,9 @@
 ﻿
 using Microsoft.Extensions.DependencyInjection;
 using NHibernate.Cfg;
-using NHibernate.Mapping.ByCode;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Dialect;
+using NHibernate.Mapping.ByCode;
 using NHibernate.Tool.hbm2ddl;
 
 namespace StackOverflow.Infrastructure.Extensions
@@ -38,8 +38,6 @@ namespace StackOverflow.Infrastructure.Extensions
             services.AddScoped(factory => sessionFactory.OpenSession());
 
             return services;
-
-
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using StackOverflow.Application.External;
 using StackOverflow.Application.Services;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,9 @@ namespace StackOverflow.Application
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<PostVoteService>().As<IPostVoteService>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<SeedService>().As<ISeedService>()
                 .InstancePerLifetimeScope();
         }
     }

@@ -8,7 +8,7 @@ namespace StackOverflow.Infrastructure.Mapping
     {
         public UserMap()
         {
-            Table("AspNetUsers"); // Adjust the table name if needed
+            Table("ApplicationUsers"); // Adjust the table name if needed
 
             Id(x => x.Id, map => map.Generator(Generators.GuidComb));
 

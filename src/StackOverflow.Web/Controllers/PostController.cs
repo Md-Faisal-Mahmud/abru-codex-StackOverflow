@@ -2,8 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using StackOverflow.Infrastructure.Features.Membership;
-using StackOverflow.Infrastructure.UnitOfWorks;
+using StackOverflow.Infrastructure.Membership.Entities;
 using StackOverflow.Web.Models.PostModel;
 
 namespace StackOverflow.Web.Controllers
@@ -21,7 +20,7 @@ namespace StackOverflow.Web.Controllers
             _contextAccessor = contextAccessor;
         }
 
-        public async Task<IActionResult> Index(int pageIndex=1)
+        public async Task<IActionResult> Index(int pageIndex = 1)
         {
             var model = _scope.Resolve<PostListModel>();
             model.ResolveDependency(_scope);
@@ -72,14 +71,14 @@ namespace StackOverflow.Web.Controllers
                 return NotFound();
             }
 
-            if(User.Identity.IsAuthenticated)
+            if (User.Identity.IsAuthenticated)
             {
                 _contextAccessor.HttpContext.Session.SetString("userId", _userManager.GetUserId(User).ToString());
             }
-            
+
             return View(post);
         }
 
-        
+
     }
 }

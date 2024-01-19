@@ -1,6 +1,4 @@
-﻿using StackOverflow.Infrastructure.Features.Membership;
-
-namespace StackOverflow.Infrastructure.Entity
+﻿namespace StackOverflow.Infrastructure.Entity
 {
     public class Post : IEntity<Guid>
     {

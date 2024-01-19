@@ -2,8 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using StackOverflow.Infrastructure.Entity;
-using StackOverflow.Infrastructure.Features.Membership;
+using StackOverflow.Infrastructure.Membership.Entities;
 using StackOverflow.Web.Models.AnswerModel;
 using StackOverflow.Web.Models.PostModel;
 
@@ -84,7 +83,7 @@ namespace StackOverflow.Web.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AcceptAnswer(Guid answerId,Guid postId)
+        public async Task<IActionResult> AcceptAnswer(Guid answerId, Guid postId)
         {
             var model = _scope.Resolve<UpdateAnswerModel>();
             await model.AcceptAnswer(answerId, postId);
