@@ -24,9 +24,10 @@ namespace StackOverflow.Application.External
 
         private async Task SeedUser()
         {
-            var users = AdminSeed.GetUsers;
+            var admin = AdminSeed.GetUsers;
+            var normalUser = UserSeed.GetUsers;
 
-            foreach (var user in users)
+            foreach (var user in admin)
             {
                 var result = await _userManager.FindByNameAsync(user.NormalizedUserName);
 
@@ -34,6 +35,17 @@ namespace StackOverflow.Application.External
                 {
                     await _userManager.CreateAsync(user);
                     await _userManager.AddToRoleAsync(user, "ADMIN");
+                }
+            }
+
+            foreach (var user in normalUser)
+            {
+                var result = await _userManager.FindByNameAsync(user.NormalizedUserName);
+
+                if (result == null)
+                {
+                    await _userManager.CreateAsync(user);
+                    await _userManager.AddToRoleAsync(user, "USER");
                 }
             }
         }
