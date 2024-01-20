@@ -1,5 +1,21 @@
 # StackOverflow Clone Implementation with ASP.NET 6 MVC and Razor Pages
 
+## Default User Accounts for Testing
+
+### Super Admin Account
+- **Email:** sadmin@gmail.com
+- **Password:** 123456
+- **Role:** admin
+
+This super admin account has elevated privileges for administrative tasks.
+
+### Normal User Account
+- **Email:** abc@gmail.com
+- **Password:** 123456
+- **Role:** user
+
+Use this normal user account for regular interactions with the system.
+
 ## Technologies Used:
 - Asp.Net Core 6
 - NHibernate.AspNetCore.Identity
